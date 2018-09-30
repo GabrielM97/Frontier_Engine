@@ -6,6 +6,7 @@
 #include <HAPI_lib.h>
 #include "World/World.h"
 #include "Graphics/Graphics.h"
+#include "Graphics/Sprite.h"
 // HAPI itself is wrapped in the HAPISPACE namespace
 using namespace HAPISPACE;
 
@@ -17,9 +18,10 @@ void HAPI_Main()
 	const int SCREENHEIGHT = 600;
 
 	Graphics *window = new Graphics();
-
+	Sprite *player = new Sprite(5, 5, 4, 4);
 	window->CreateWindow(SCREENWIDTH, SCREENHEIGHT, "Frontier Engine", 2);
-	BYTE *textureData;
+	player->LoadSprite("Res\\Textures\\Lucas.png");
+	/*BYTE *textureData;
 	int textureWidth, textureHeight;
 	if (!HAPI.LoadTexture("Res\\Textures\\DS DSi - Pokemon Platinum - Lucas.png", &textureData, textureWidth, textureHeight))
 	{
@@ -27,11 +29,13 @@ void HAPI_Main()
 	}
 
 	int px = 1;
-	int py = 0;
+	int py = 0;*/
 	while (window->Update())
 	{
 		window->ClearScreen(60, 88, 232, 255);
-		window->Blit(textureData, textureWidth, textureHeight, 200, 100);
+		player->Animate(Direction::SOUTH, State::moving);
+		player->Draw();
+		/*window->Blit(textureData, textureWidth, textureHeight, 200, 100);
 		px++;
 
 		if (px > 3)
@@ -39,11 +43,12 @@ void HAPI_Main()
 			px = 0;
 		}
 		window->BlitClipping(textureData, px* (textureWidth / 4), py* (textureHeight / 4),  textureWidth,
-			px*(textureWidth/4)+ (textureWidth / 4), (py*(textureHeight/ 4))+ (textureHeight / 4), 400,250);
+			px*(textureWidth/4)+ (textureWidth / 4), (py*(textureHeight/ 4))+ (textureHeight / 4), 400,250);*/
 		HAPI.SetShowFPS(true);
 	}
 
 	delete window;
-	delete textureData;
+	delete player;
+	
 }
 

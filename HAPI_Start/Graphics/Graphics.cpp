@@ -1,16 +1,17 @@
 #include "Graphics.h"
 
-
+int Graphics::screenWidth;
+int Graphics::screenHeight;
 
 Graphics::Graphics()
 {
 }
 
-bool Graphics::CreateWindow(const int & screenWidth, const int & screenHeight, string title, unsigned int flag)
+bool Graphics::CreateWindow(const int & Width, const int & Height, string title, unsigned int flag)
 {
-	this->screenWidth = screenWidth;
-	this->screenHeight = screenHeight;
-	if (!HAPI.Initialise(this->screenWidth, this->screenHeight, title, flag))
+	screenWidth =  Width;
+	screenHeight = Height;
+	if (!HAPI.Initialise(screenWidth, screenHeight, title, flag))
 	{
 		cerr << "Error!\n"
 				"Failed to create window."

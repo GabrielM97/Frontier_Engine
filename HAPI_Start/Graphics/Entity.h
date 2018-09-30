@@ -3,6 +3,7 @@
 #include<iostream>
 #include "../Vector2D.h"
 #include <HAPI_lib.h>
+#include "Graphics.h"
 
 
 using namespace HAPISPACE;
@@ -19,7 +20,7 @@ protected:
 	BYTE * textureData{ nullptr };
 	int textureWidth;
 	int textureHeight;
-
+	Graphics *renderer{ nullptr };
 	virtual void Draw() = 0;
 	
 
