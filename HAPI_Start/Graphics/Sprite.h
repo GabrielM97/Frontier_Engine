@@ -1,11 +1,23 @@
 #pragma once
-
 #include "Entity.h"
 
-class Sprite public Entity
+enum class Direction
+{
+	SOUTH = 0,
+	NORTH = 1,
+	WEST = 2,
+	EAST = 3
+
+};
+
+
+class Sprite :public Entity
 {
 public:
 	Sprite();
+	
 	virtual ~Sprite();
+
+	
 };
 

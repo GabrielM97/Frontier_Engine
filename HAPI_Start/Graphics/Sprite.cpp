@@ -2,8 +2,14 @@
 
 
 
-Sprite::Sprite() :Entity()
+Sprite::Sprite()
 {
+}
+
+
+void Entity::Draw()
+{
+
 }
 
 
