@@ -3,8 +3,10 @@
 int Graphics::screenWidth;
 int Graphics::screenHeight;
 
+
 Graphics::Graphics()
 {
+	
 }
 
 bool Graphics::CreateWindow(const int & Width, const int & Height, string title, unsigned int flag)
@@ -20,67 +22,131 @@ bool Graphics::CreateWindow(const int & Width, const int & Height, string title,
 		return false;
 	}
 	
-
+	screen = HAPI.GetScreenPointer();
 	return true;
 }
 
 void Graphics::ClearScreen(unsigned int r, unsigned int g, unsigned int b, unsigned int a)
 {
+	BYTE * screenPnter = screen;
 	HAPI_TColour colour(r, g, b, a);
 	for (int i = 0; i < screenWidth*screenHeight*4; i+=4)
 	{
-		BYTE * pnter = HAPI.GetScreenPointer() + i;
-		*(HAPI_TColour*)pnter = colour;
+		
+		*(HAPI_TColour*)screenPnter = colour;
+		screenPnter = screen + i;
 	}
 }
 
 void Graphics::Blit(BYTE * textureData, int & textureWidth, int & textureHeight, float x, float y)
 {
-	unsigned int offset;
-	unsigned int tOffset;
-	BYTE * pnter;
+	
 
-	for (int sHeight = 0; sHeight < textureHeight; sHeight++)
+	BYTE * screenPnter = screen + (int)(x + y * screenWidth) * 4;
+	BYTE *texturePnter = textureData;
+	int endOfLineScreenIncrement = (screenWidth - textureWidth) * 4;
+
+	for (int row = 0; row < textureHeight; row++)
 	{
-		for (int sWidth = 0; sWidth < textureWidth; sWidth++)
+		
+		for (int col = 0; col < textureWidth; col++)
 		{
-			offset = (((sWidth + x) + (sHeight + y) * screenWidth) * 4);
-			tOffset = (sWidth + sHeight * textureWidth) * 4;
-			pnter = HAPI.GetScreenPointer();
+			BYTE alpha = texturePnter[3];
+			
+			if (alpha == 255)
+			{
+				memcpy(screenPnter, texturePnter,  4);
+			
+			}
+			else if (alpha > 0)
+			{
+				BYTE blue = texturePnter[0];
+				BYTE green = texturePnter[1];
+				BYTE red = texturePnter[2];
 
-			pnter[offset] = textureData[tOffset];
-			pnter[offset + 1] = textureData[tOffset + 1];
-			pnter[offset + 2] = textureData[tOffset + 2];
-			pnter[offset + 3] = textureData[tOffset + 3];
+				float mod = alpha / 255.0f;
+				screenPnter[0] = (BYTE)(mod*blue + (1.0f - mod)*screenPnter[0]);
+				screenPnter[1] = (BYTE)(mod*green + (1.0f - mod) * screenPnter[1]);
+				screenPnter[2] = (BYTE)(mod*red + (1.0f - mod) * screenPnter[2]);
+			}
 
-
-
+			
+			
+			texturePnter +=  4;
+			screenPnter +=  4;
+			
 		}
+		
+		
+		screenPnter +=  endOfLineScreenIncrement;
+		
 	}
+
+	
 }
 
 void Graphics::BlitClipping(BYTE * textureData, int  texturePosX, int texturePosY, int textureWidth, int  clippingWidth, int  clippingHieght, float x, float y)
 {
-	unsigned int offset;
-	unsigned int tOffset;
-	BYTE * pnter;
+	//unsigned int offset;
+	//unsigned int tOffset;
+	//
 
-	for (int sHeight = texturePosY; sHeight < clippingHieght; sHeight++)
+	//for (int sHeight = texturePosY; sHeight < clippingHieght; sHeight++)
+	//{
+	//	for (int sWidth = texturePosX; sWidth < clippingWidth; sWidth++)
+	//	{
+	//		offset = (int)(((sWidth+ x-clippingWidth) + (sHeight + y - clippingHieght) * screenWidth) * 4);
+	//		tOffset = (sWidth + sHeight * textureWidth) * 4;
+	//		screen = HAPI.GetScreenPointer();
+
+	//		screen[offset] = textureData[tOffset];
+	//		screen[offset + 1] = textureData[tOffset + 1];
+	//		screen[offset + 2] = textureData[tOffset + 2];
+	//		screen[offset + 3] = textureData[tOffset + 3];
+
+
+
+	//	}
+	//}
+
+	BYTE * screenPnter = screen + (int)(x + y * screenWidth) * 4;
+	BYTE *texturePnter = textureData;
+	int endOfLineScreenIncrement = (screenWidth - clippingWidth) * 4;
+
+	for (int row = texturePosY; row < clippingHieght; row++)
 	{
-		for (int sWidth = texturePosX; sWidth < clippingWidth; sWidth++)
+
+		for (int col = texturePosX; col < clippingWidth; col++)
 		{
-			offset = (((sWidth+ x-clippingWidth) + (sHeight + y - clippingHieght) * screenWidth) * 4);
-			tOffset = (sWidth + sHeight * textureWidth) * 4;
-			pnter = HAPI.GetScreenPointer();
+			BYTE alpha = texturePnter[3];
 
-			pnter[offset] = textureData[tOffset];
-			pnter[offset + 1] = textureData[tOffset + 1];
-			pnter[offset + 2] = textureData[tOffset + 2];
-			pnter[offset + 3] = textureData[tOffset + 3];
+			if (alpha == 255)
+			{
+				memcpy(screenPnter, texturePnter, 4);
+
+			}
+			else if (alpha > 0)
+			{
+				BYTE blue = texturePnter[0];
+				BYTE green = texturePnter[1];
+				BYTE red = texturePnter[2];
+
+				float mod = alpha / 255.0f;
+				screenPnter[0] = (BYTE)(mod*blue + (1.0f - mod)*screenPnter[0]);
+				screenPnter[1] = (BYTE)(mod*green + (1.0f - mod) * screenPnter[1]);
+				screenPnter[2] = (BYTE)(mod*red + (1.0f - mod) * screenPnter[2]);
+			}
 
 
+
+			texturePnter +=  4;
+			screenPnter +=  4;
 
 		}
+
+
+		screenPnter += endOfLineScreenIncrement;
+
 	}
 }
 

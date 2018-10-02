@@ -22,8 +22,8 @@ public:
 	Sprite();
 
 	Sprite(int x, int y, int spritesInCol, int spritesInRow);
-	void Draw();
-	bool LoadSprite(string path);
+	void Draw(int flag, Graphics *window);
+	bool LoadTexture(string path);
 	void Animate(Direction dir, State s);
 	virtual ~Sprite();
 

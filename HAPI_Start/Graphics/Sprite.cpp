@@ -4,10 +4,10 @@
 
 Sprite::Sprite()
 {
-	renderer = new Graphics();
+	
 }
 
-Sprite::Sprite(int x, int y,int spritesInCol, int spritesInRow)
+Sprite::Sprite(int x, int y,int spritesInCol, int spritesInRow )
 {
 	this->spritesInCol = spritesInCol;
 	this->spritesInRow = spritesInRow;
@@ -15,20 +15,23 @@ Sprite::Sprite(int x, int y,int spritesInCol, int spritesInRow)
 	position.y = y;
 	texturePosition.x = 0;
 	texturePosition.y = 0;
-	renderer = new Graphics();
+	
 }
 
-void Sprite::Draw()
+void Sprite::Draw(int flag, Graphics *window)
 {
 	int left = texturePosition.x * (textureWidth / spritesInCol);
 	int top = texturePosition.y*(textureHeight / spritesInRow);
 	int right = (texturePosition.x *(textureWidth / spritesInCol)) + (textureWidth / spritesInCol);
 	int bottom = (texturePosition.y *(textureHeight / spritesInRow)) + (textureHeight / spritesInRow);
 
-	renderer->BlitClipping(textureData,left, top, textureWidth, right, bottom, position.x*(textureWidth / spritesInCol), position.y*(textureHeight / spritesInRow));
+	if (flag == 0)
+		window->BlitClipping(textureData, left, top, textureWidth, right, bottom, position.x, position.y);
+	else
+		window->Blit(textureData, textureWidth, textureHeight, position.x, position.y);
 }
 
-bool Sprite::LoadSprite(string path)
+bool Sprite::LoadTexture(string path)
 {
 
 	if (!HAPI.LoadTexture(path, &textureData, textureWidth, textureHeight))
@@ -88,6 +91,6 @@ void Sprite::Animate(Direction dir, State s)
 
 Sprite::~Sprite()
 {
-	delete renderer;
+	
 	
 }

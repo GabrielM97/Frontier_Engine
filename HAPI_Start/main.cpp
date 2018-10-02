@@ -1,5 +1,7 @@
-/* Frontier Game Engine!
-   By Gabriel Menezes
+/* 
+	Frontier Game Engine! v1.0
+	
+	By Gabriel Menezes
 */
 
 // Include the HAPI header to get access to all of HAPIs interfaces
@@ -19,31 +21,16 @@ void HAPI_Main()
 
 	Graphics *window = new Graphics();
 	Sprite *player = new Sprite(5, 5, 4, 4);
-	window->CreateWindow(SCREENWIDTH, SCREENHEIGHT, "Frontier Engine", 2);
-	player->LoadSprite("Res\\Textures\\Lucas.png");
-	/*BYTE *textureData;
-	int textureWidth, textureHeight;
-	if (!HAPI.LoadTexture("Res\\Textures\\DS DSi - Pokemon Platinum - Lucas.png", &textureData, textureWidth, textureHeight))
-	{
-		cerr << "Error texture not loaded correctly..." << endl;
-	}
 
-	int px = 1;
-	int py = 0;*/
+	window->CreateWindow(SCREENWIDTH, SCREENHEIGHT, "Frontier Engine", 2);
+	player->LoadTexture("Data\\Textures\\Lucas.png");
+
 	while (window->Update())
 	{
-		window->ClearScreen(60, 88, 232, 255);
-		player->Animate(Direction::SOUTH, State::moving);
-		player->Draw();
-		/*window->Blit(textureData, textureWidth, textureHeight, 200, 100);
-		px++;
-
-		if (px > 3)
-		{
-			px = 0;
-		}
-		window->BlitClipping(textureData, px* (textureWidth / 4), py* (textureHeight / 4),  textureWidth,
-			px*(textureWidth/4)+ (textureWidth / 4), (py*(textureHeight/ 4))+ (textureHeight / 4), 400,250);*/
+		window->ClearScreen(255, 255, 255, 255);
+		//player->Animate(Direction::SOUTH, State::moving);
+		player->Draw(1,window);
+		
 		HAPI.SetShowFPS(true);
 	}
 

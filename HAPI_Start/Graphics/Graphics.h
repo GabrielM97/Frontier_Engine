@@ -19,7 +19,7 @@ public:
 private:
 	static int screenWidth;
 	static int screenHeight;
-
+	BYTE *screen;
 
 
 };

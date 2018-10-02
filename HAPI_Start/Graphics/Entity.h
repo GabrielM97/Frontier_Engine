@@ -20,8 +20,9 @@ protected:
 	BYTE * textureData{ nullptr };
 	int textureWidth;
 	int textureHeight;
-	Graphics *renderer{ nullptr };
-	virtual void Draw() = 0;
+	
+	virtual bool LoadTexture(string path) = 0;
+	virtual void Draw(int flag, Graphics *window) = 0;
 	
 
 	
