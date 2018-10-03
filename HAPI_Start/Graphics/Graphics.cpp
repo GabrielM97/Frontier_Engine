@@ -104,25 +104,27 @@ void Graphics::BlitClipping(BYTE * textureData, int  texturePosX, int texturePos
 	//		screen[offset + 2] = textureData[tOffset + 2];
 	//		screen[offset + 3] = textureData[tOffset + 3];
 
-
+		
 
 	//	}
 	//}
 
 	BYTE * screenPnter = screen + (int)(x + y * screenWidth) * 4;
-	BYTE *texturePnter = textureData;
+	BYTE *texturePnter = textureData + (texturePosX + texturePosY * clippingWidth) * 4;
 	int endOfLineScreenIncrement = (screenWidth - clippingWidth) * 4;
+	int endOfTextureIncrement = (textureWidth - clippingWidth) * 4;
 
-	for (int row = texturePosY; row < clippingHieght; row++)
+	for (int row = 0; row < clippingHieght; row++)
 	{
 
-		for (int col = texturePosX; col < clippingWidth; col++)
+		for (int col = 0; col < clippingWidth; col++)
 		{
 			BYTE alpha = texturePnter[3];
 
 			if (alpha == 255)
 			{
 				memcpy(screenPnter, texturePnter, 4);
+				
 
 			}
 			else if (alpha > 0)
@@ -146,7 +148,7 @@ void Graphics::BlitClipping(BYTE * textureData, int  texturePosX, int texturePos
 
 
 		screenPnter += endOfLineScreenIncrement;
-
+		texturePnter += endOfTextureIncrement;
 	}
 }
 
