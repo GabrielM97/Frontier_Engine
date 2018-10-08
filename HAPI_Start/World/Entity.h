@@ -3,10 +3,12 @@
 #include<iostream>
 #include "..\SourceFiles\Vector2D.h"
 #include <HAPI_lib.h>
-#include "Graphics.h"
+
 
 
 using namespace HAPISPACE;
+class Graphics;
+
 class Entity
 {
 public:

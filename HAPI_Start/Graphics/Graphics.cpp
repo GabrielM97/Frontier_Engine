@@ -1,8 +1,6 @@
 #include "Graphics.h"
 
 
-
-
 Graphics::Graphics()
 {
 	
@@ -144,6 +142,28 @@ bool Graphics::Update()
 }
 
 
+void Graphics::CreateSprite(std::string name, int x, int y, int spritesInCol, int spritesInRow)
+{
+	Sprite *spritePntr = new Sprite(name, x, y, spritesInCol, spritesInRow);
+	
+	sprites.insert(std::pair<std::string, Sprite*>(name, spritePntr) );
+}
+
+bool Graphics::LoadTexture(std::string name, std::string path)
+{
+	if (sprites.at(name)->LoadTexture(path))
+	{
+		return true;
+	}
+
+
+	return false;
+}
+
 Graphics::~Graphics()
 {
+	for (auto sprite : sprites)
+		delete sprite.second;
+
+	cout << "Detructor" << endl;
 }

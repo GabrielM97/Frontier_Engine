@@ -1,8 +1,9 @@
 #pragma once
-#include "Entity.h"
+#include "..\World\Entity.h"
 #include<string>
 
 using namespace std;
+
 enum class Direction
 {
 	SOUTH = 0,
@@ -21,14 +22,16 @@ class Sprite :public Entity
 public:
 	Sprite();
 
-	Sprite(int x, int y, int spritesInCol, int spritesInRow);
+	Sprite(string name, int x, int y, int spritesInCol, int spritesInRow);
 	void Draw(int flag, Graphics *window);
 	bool LoadTexture(string path);
 	void Animate(Direction dir, State s);
+	string GetName() { return name; };
 	virtual ~Sprite();
 
 private:
 	int spritesInCol{ 0 };
 	int spritesInRow{ 0 };
+	string name;
 };
 

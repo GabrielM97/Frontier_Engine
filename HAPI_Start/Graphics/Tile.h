@@ -1,7 +1,7 @@
 #pragma once
 
 #include <vector>
-#include"Entity.h"
+#include"..\\World\Entity.h"
 #include <string>
 
 using namespace std;

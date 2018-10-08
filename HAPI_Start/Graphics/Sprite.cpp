@@ -1,5 +1,5 @@
 #include "Sprite.h"
-
+#include "Graphics.h"
 
 
 Sprite::Sprite()
@@ -7,10 +7,11 @@ Sprite::Sprite()
 	
 }
 
-Sprite::Sprite(int x, int y,int spritesInCol, int spritesInRow )
+Sprite::Sprite(string name, int x, int y,int spritesInCol, int spritesInRow )
 {
 	this->spritesInCol = spritesInCol;
 	this->spritesInRow = spritesInRow;
+	this->name = name;
 	position.x = x;
 	position.y = y;
 	texturePosition.x = 0;
