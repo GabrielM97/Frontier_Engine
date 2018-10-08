@@ -17,8 +17,8 @@ public:
 
 	
 private:
-	static int screenWidth;
-	static int screenHeight;
+	int screenWidth;
+	int screenHeight;
 	BYTE *screen;
 
 

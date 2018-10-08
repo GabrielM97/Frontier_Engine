@@ -1,7 +1,6 @@
 #include "Graphics.h"
 
-int Graphics::screenWidth;
-int Graphics::screenHeight;
+
 
 
 Graphics::Graphics()
@@ -65,9 +64,9 @@ void Graphics::Blit(BYTE * textureData, int & textureWidth, int & textureHeight,
 				BYTE red = texturePnter[2];
 
 				float mod = alpha / 255.0f;
-				screenPnter[0] = (BYTE)(mod*blue + (1.0f - mod)*screenPnter[0]);
-				screenPnter[1] = (BYTE)(mod*green + (1.0f - mod) * screenPnter[1]);
-				screenPnter[2] = (BYTE)(mod*red + (1.0f - mod) * screenPnter[2]);
+				screenPnter[0] = screenPnter[0] + ((alpha*(blue - screenPnter[0])) >> 8);
+				screenPnter[1] = screenPnter[1] + ((alpha*(green - screenPnter[1])) >> 8);
+				screenPnter[2] = screenPnter[2] + ((alpha*(red - screenPnter[2])) >> 8);
 			}
 
 			
@@ -90,7 +89,7 @@ void Graphics::BlitClipping(BYTE * textureData, int  texturePosX, int texturePos
 	
 
 	BYTE * screenPnter = screen + (int)(x + y * screenWidth) * 4;
-	BYTE *texturePnter = textureData + (texturePosX + texturePosY * clippingWidth) * 4;
+	BYTE *texturePnter = textureData + (texturePosX + texturePosY * textureWidth) * 4;
 	int endOfLineScreenIncrement = (screenWidth - clippingWidth) * 4;
 	int endOfTextureIncrement = (textureWidth - clippingWidth) * 4;
 
@@ -113,10 +112,11 @@ void Graphics::BlitClipping(BYTE * textureData, int  texturePosX, int texturePos
 				BYTE green = texturePnter[1];
 				BYTE red = texturePnter[2];
 
-				float mod = alpha / 255.0f;
-				screenPnter[0] = (BYTE)(mod*blue + (1.0f - mod)*screenPnter[0]);
-				screenPnter[1] = (BYTE)(mod*green + (1.0f - mod) * screenPnter[1]);
-				screenPnter[2] = (BYTE)(mod*red + (1.0f - mod) * screenPnter[2]);
+				//gives value between 0 and 1;
+				float mod = (float)alpha / 255.0f;
+				screenPnter[0] = screenPnter[0] + ((alpha*(blue - screenPnter[0])) >> 8);
+				screenPnter[1] = screenPnter[1] + ((alpha*(green - screenPnter[1])) >> 8);
+				screenPnter[2] = screenPnter[2] + ((alpha*(red - screenPnter[2])) >> 8);
 			}
 
 

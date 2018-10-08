@@ -26,7 +26,7 @@ void Sprite::Draw(int flag, Graphics *window)
 	int bottom = (texturePosition.y *(textureHeight / spritesInRow)) + (textureHeight / spritesInRow);
 
 	if (flag == 0)
-		window->BlitClipping(textureData, left, top, textureWidth, right, bottom, position.x, position.y);
+		window->BlitClipping(textureData, left, top, textureWidth, right-left, bottom-top, position.x, position.y);
 	else
 		window->Blit(textureData, textureWidth, textureHeight, position.x, position.y);
 }

@@ -24,7 +24,7 @@
     <ClCompile Include="Graphics\Graphics.cpp" />
     <ClCompile Include="Graphics\Sprite.cpp" />
     <ClCompile Include="Graphics\Tile.cpp" />
-    <ClCompile Include="main.cpp">
+    <ClCompile Include="SourceFiles\main.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
@@ -32,7 +32,7 @@
     </ClCompile>
     <ClCompile Include="Physics\Physics.cpp" />
     <ClCompile Include="Sound\Sound.cpp" />
-    <ClCompile Include="Vector2D.cpp" />
+    <ClCompile Include="SourceFiles\Vector2D.cpp" />
     <ClCompile Include="World\World.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -43,7 +43,7 @@
     <ClInclude Include="Graphics\Tile.h" />
     <ClInclude Include="Physics\Physics.h" />
     <ClInclude Include="Sound\Sound.h" />
-    <ClInclude Include="Vector2D.h" />
+    <ClInclude Include="SourceFiles\Vector2D.h" />
     <ClInclude Include="World\World.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
