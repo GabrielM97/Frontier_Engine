@@ -87,27 +87,7 @@ void Graphics::Blit(BYTE * textureData, int & textureWidth, int & textureHeight,
 
 void Graphics::BlitClipping(BYTE * textureData, int  texturePosX, int texturePosY, int textureWidth, int  clippingWidth, int  clippingHieght, float x, float y)
 {
-	//unsigned int offset;
-	//unsigned int tOffset;
-	//
-
-	//for (int sHeight = texturePosY; sHeight < clippingHieght; sHeight++)
-	//{
-	//	for (int sWidth = texturePosX; sWidth < clippingWidth; sWidth++)
-	//	{
-	//		offset = (int)(((sWidth+ x-clippingWidth) + (sHeight + y - clippingHieght) * screenWidth) * 4);
-	//		tOffset = (sWidth + sHeight * textureWidth) * 4;
-	//		screen = HAPI.GetScreenPointer();
-
-	//		screen[offset] = textureData[tOffset];
-	//		screen[offset + 1] = textureData[tOffset + 1];
-	//		screen[offset + 2] = textureData[tOffset + 2];
-	//		screen[offset + 3] = textureData[tOffset + 3];
-
-		
-
-	//	}
-	//}
+	
 
 	BYTE * screenPnter = screen + (int)(x + y * screenWidth) * 4;
 	BYTE *texturePnter = textureData + (texturePosX + texturePosY * clippingWidth) * 4;
