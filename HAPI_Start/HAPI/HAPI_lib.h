@@ -59,7 +59,7 @@ namespace HAPISPACE {
 
 		// Tells HAPI to display (or not) the frames per second
 		// Optionally can provide position and colour
-		virtual bool SetShowFPS(bool set, int x=0, int y=0, HAPI_TColour& col=HAPI_TColour::BLACK) = 0;
+		virtual bool SetShowFPS(bool set, int x=0, int y=0, HAPI_TColour& col=HAPI_TColour::GREEN) = 0;
 
 		// Retrieve the current FPS as a value
 		virtual int GetFPS() const = 0;

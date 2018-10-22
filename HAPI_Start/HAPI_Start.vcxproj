@@ -20,10 +20,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AI\AI.cpp" />
+    <ClCompile Include="Rectangle.cpp" />
     <ClCompile Include="World\Entity.cpp" />
     <ClCompile Include="Graphics\Graphics.cpp" />
     <ClCompile Include="Graphics\Sprite.cpp" />
-    <ClCompile Include="Graphics\Tile.cpp" />
+    <ClCompile Include="Graphics\Tileset.cpp" />
     <ClCompile Include="SourceFiles\main.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
@@ -37,10 +38,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AI\AI.h" />
+    <ClInclude Include="Rectangle.h" />
     <ClInclude Include="World\Entity.h" />
     <ClInclude Include="Graphics\Graphics.h" />
     <ClInclude Include="Graphics\Sprite.h" />
-    <ClInclude Include="Graphics\Tile.h" />
+    <ClInclude Include="Graphics\Tileset.h" />
     <ClInclude Include="Physics\Physics.h" />
     <ClInclude Include="Sound\Sound.h" />
     <ClInclude Include="SourceFiles\Vector2D.h" />
@@ -134,6 +136,7 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>HAPI;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <BrowseInformation>true</BrowseInformation>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -141,6 +144,9 @@
       <AdditionalLibraryDirectories>HAPI;C:\Program Files (x86)\Visual Leak Detector\lib\Win64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>HAPI_Debug64.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <Bscmake>
+      <PreserveSbr>true</PreserveSbr>
+    </Bscmake>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>

@@ -12,16 +12,18 @@ class World
 public:
 	World();
 	void Run();
-	void SetupGameWorld();
+	bool SetupGameWorld();
 	void DisplayLogo();
 	void createGameWorld();
+	void CheckUserInput(std::string name);
 	virtual ~World();
 
 private:
 	const int SCREENWIDTH = 800;
-	const int SCREENHEIGHT = 600;
+	const int SCREENHEIGHT = 608;
 	Graphics *window{nullptr};
 	DWORD lastTick = 0;
+	unsigned int elaspsTime{ 100 };
 
 };
 
