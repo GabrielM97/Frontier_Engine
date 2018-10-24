@@ -20,11 +20,12 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AI\AI.cpp" />
+    <ClCompile Include="Graphics\Tileset.cpp" />
     <ClCompile Include="Rectangle.cpp" />
+    <ClCompile Include="Graphics\Tile.cpp" />
     <ClCompile Include="World\Entity.cpp" />
     <ClCompile Include="Graphics\Graphics.cpp" />
     <ClCompile Include="Graphics\Sprite.cpp" />
-    <ClCompile Include="Graphics\Tileset.cpp" />
     <ClCompile Include="SourceFiles\main.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
@@ -38,11 +39,12 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AI\AI.h" />
+    <ClInclude Include="Graphics\Tileset.h" />
     <ClInclude Include="Rectangle.h" />
+    <ClInclude Include="Graphics\Tile.h" />
     <ClInclude Include="World\Entity.h" />
     <ClInclude Include="Graphics\Graphics.h" />
     <ClInclude Include="Graphics\Sprite.h" />
-    <ClInclude Include="Graphics\Tileset.h" />
     <ClInclude Include="Physics\Physics.h" />
     <ClInclude Include="Sound\Sound.h" />
     <ClInclude Include="SourceFiles\Vector2D.h" />

@@ -4,8 +4,8 @@
 #include <vector>
 #include <unordered_map>
 #include "Sprite.h"
-#include "Tileset.h"
 #include "..\Rectangle.h"
+#include "Tileset.h"
 
 using namespace std;
 using namespace HAPISPACE;
@@ -20,14 +20,18 @@ public:
 	void ClearScreen(unsigned int r, unsigned int g, unsigned int b, unsigned int a);
 	
 	bool Update();
-	void CreateSprite(std::string name, int x, int y, int spritesInCol, int spritesInRow);
-	void CreateTileSet(std::string name, int tilesInCol, int tilesInRow, std::string path );
-	bool LoadTexture(std::string name, std::string path)const;
-	Sprite* GetSprite(std::string name) { return sprites.at(name);};
-	Tileset* GetTileset(std::string name) { return tilesets.at(name); };
+	bool CreateSprite(std::string name, int x, int y, int spritesInCol, int spritesInRow, std::string path);
 
-	void Blit(BYTE * textureData, int & textureWidth, int & textureHeight, float x, float y)const;
-	void BlitClipping(BYTE * textureData, int texturePosX, int texturePosY, int textureWidth, int clippingWidth, int clippingHieght, float x, float y)const;
+	bool CreateTileset(std::string name, int spritesInCol, int spritesInRow, std::string path);
+
+	void MakeTiles(std::string name);
+	void GenerateTileMap(std::string name);
+	void DrawTilemap(std::string name);
+	Sprite* GetSprite(std::string name) { return sprites.at(name);};
+	Tileset* GetTileSet(std::string name) { return tilesets.at(name);};
+
+	void Draw(std::string name, RenderType flag);
+	
 	virtual ~Graphics();
 
 	
@@ -39,6 +43,7 @@ private:
 	BYTE *screen;
 	unordered_map<std::string, Sprite*> sprites;
 	unordered_map<std::string, Tileset*> tilesets;
+
 
 
 };

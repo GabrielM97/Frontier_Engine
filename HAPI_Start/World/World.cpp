@@ -31,20 +31,15 @@ bool World::SetupGameWorld()
 		return false;
 	}
 
-	window->CreateSprite("Lucas", 10, 10, 4, 4);
-	window->LoadTexture("Lucas", "Data\\Lucas.png");
+	window->CreateSprite("Lucas", 10, 10, 4, 4, "Data\\Lucas.png");
+
 	window->GetSprite("Lucas")->SetIsCollidable(true);
 
-	window->CreateSprite("logo", 0, 0, 4, 4);
-	window->LoadTexture("logo", "Data\\HorizonEngine-Logo.png");
+	window->CreateSprite("logo", 0, 0, 4, 4, "Data\\HorizonEngine-Logo.png");
 
-	window->CreateSprite("bg", 0, 0, 4, 4);
-	window->LoadTexture("bg", "Data\\Shooter.png");
-
-	window->CreateTileSet("map1", 14, 6, "Data\\scifitiles-sheet.png");
-	window->GetTileset("map1")->CreateTiles();
-	window->GetTileset("map1")->GenerateTilemap();
-	
+	window->CreateTileset("map1", 14, 6, "Data\\scifitiles-sheet.png");
+	window->MakeTiles("map1");
+	window->GenerateTileMap("map1");
 	HAPI.SetShowFPS(true);
 	return true;
 }
@@ -58,7 +53,7 @@ void World::DisplayLogo()
 	while (window->Update() && seconds_since_start <4)
 	{
 		window->ClearScreen(34, 54, 86, 255);
-		window->GetSprite("logo")->Draw(1, window);
+		window->Draw("logo", RenderType::TEXTURE);
 
 		seconds_since_start = difftime(time(0), start);
 	}
@@ -70,93 +65,20 @@ void World::DisplayLogo()
 #pragma region GAME
 void World::createGameWorld()
 {
-	
 
 	while (window->Update())
 	{
 		if (HAPI.GetTime() - lastTick >= elaspsTime)
 		{
-			//window->ClearScreen(13, 153, 90, 255);
-			//window->GetSprite("bg")->Draw(1, window);
-
-			window->GetTileset("map1")->draw(window);
+			window->DrawTilemap("map1");
 			CheckUserInput("Lucas");
-			window->GetSprite("Lucas")->Draw(0, window);
-
-			for (auto t : window->GetTileset("map1")->GetTile())
-			{
-				
-				if (t.GetIsCollidable())
-				{
-					cout << t.GetName() << endl;
-					//left intersect
-					if (t.GetPos().x > window->GetSprite("Lucas")->GetPos().x &&
-						t.GetPos().x < window->GetSprite("Lucas")->GetPos().x + 34)
-					{
-
-						if (t.GetPos().y > window->GetSprite("Lucas")->GetPos().y &&
-							t.GetPos().y < window->GetSprite("Lucas")->GetPos().y + 34)
-						{
-
-							window->GetSprite("Lucas")->SetPos(window->GetSprite("Lucas")->GetPos().x - 5,
-								window->GetSprite("Lucas")->GetPos().y);
-
-						}
-
-					}
-
-					//top intersect
-					if (t.GetPos().y > window->GetSprite("Lucas")->GetPos().y &&
-						t.GetPos().y < window->GetSprite("Lucas")->GetPos().y + 34)
-					{
-						if (t.GetPos().x > window->GetSprite("Lucas")->GetPos().x &&
-							t.GetPos().x < window->GetSprite("Lucas")->GetPos().x + 34)
-						{
-
-							window->GetSprite("Lucas")->SetPos(window->GetSprite("Lucas")->GetPos().x,
-								window->GetSprite("Lucas")->GetPos().y - 5);
-
-						}
-					}
-
-					if (t.GetPos().y + 30 > window->GetSprite("Lucas")->GetPos().y &&
-						t.GetPos().y + 30 < window->GetSprite("Lucas")->GetPos().y + 34)
-					{
-						if (t.GetPos().x > window->GetSprite("Lucas")->GetPos().x &&
-							t.GetPos().x < window->GetSprite("Lucas")->GetPos().x + 34)
-						{
-
-
-							window->GetSprite("Lucas")->SetPos(window->GetSprite("Lucas")->GetPos().x,
-								window->GetSprite("Lucas")->GetPos().y + 5);
-
-						}
-					}
-
-					if (t.GetPos().x + 30 > window->GetSprite("Lucas")->GetPos().x &&
-						t.GetPos().x + 30 < window->GetSprite("Lucas")->GetPos().x + 34)
-					{
-
-						if (t.GetPos().y > window->GetSprite("Lucas")->GetPos().y &&
-							t.GetPos().y < window->GetSprite("Lucas")->GetPos().y + 34)
-						{
-
-							window->GetSprite("Lucas")->SetPos(window->GetSprite("Lucas")->GetPos().x + 5,
-								window->GetSprite("Lucas")->GetPos().y);
-
-						}
-
-					}
-				}
-			}
+			window->Draw("Lucas", RenderType::TILE);
 
 
 			lastTick = HAPI.GetTime();
 		
 		}
 
-			
-		
 		
 	}
 }
@@ -172,6 +94,7 @@ void World::CheckUserInput(std::string name)
 #pragma region KEYBAORD INPUT
 	if (keyData.scanCode[HK_DOWN])
 	{
+		
 		window->GetSprite(name)->Animate(Direction::SOUTH, State::moving);
 		if (isRunning)
 		{

@@ -36,128 +36,7 @@ void Graphics::ClearScreen(unsigned int r, unsigned int g, unsigned int b, unsig
 	}
 }
 
-void Graphics::Blit(BYTE * textureData, int & textureWidth, int & textureHeight, float x, float y)const
-{
 
-	BYTE * screenPnter = screen + (int)(x + y * screenWidth) * 4;
-	BYTE *texturePnter = textureData;
-	int endOfLineScreenIncrement = (screenWidth - textureWidth) * 4;
-
-	
-	for (int row = 0; row < textureHeight; row++)
-	{
-
-		for (int col = 0; col < textureWidth; col++)
-		{
-			BYTE alpha = texturePnter[3];
-
-			if (alpha == 255)
-			{
-				memcpy(screenPnter, texturePnter, 4);
-
-			}
-			else if (alpha > 0)
-			{
-				BYTE blue = texturePnter[0];
-				BYTE green = texturePnter[1];
-				BYTE red = texturePnter[2];
-
-				float mod = alpha / 255.0f;
-				screenPnter[0] = screenPnter[0] + ((alpha*(blue - screenPnter[0])) >> 8);
-				screenPnter[1] = screenPnter[1] + ((alpha*(green - screenPnter[1])) >> 8);
-				screenPnter[2] = screenPnter[2] + ((alpha*(red - screenPnter[2])) >> 8);
-			}
-
-
-
-			texturePnter += 4;
-			screenPnter += 4;
-
-		}
-
-
-		screenPnter += endOfLineScreenIncrement;
-
-	}
-	
-}
-
-void Graphics::BlitClipping(BYTE * textureData, int  texturePosX, int texturePosY, int textureWidth, int  clippingWidth, int  clippingHeight, float x, float y)const
-{
-	
-
-	int t_posX =0;
-	int t_posY = 0;
-
-	if (x < 0)
-	{
-		t_posX -= x;
-		x = 0;
-	}
-
-	if (y < 0)
-	{
-		t_posY -= y;
-		y = 0;
-	}
-
-	if (x+clippingWidth > screenWidth)
-	{
-		clippingWidth -= (x + clippingWidth)  - screenWidth;
-		
-	}
-	if (y+clippingHeight > screenHeight)
-	{
-		clippingHeight -= (y + clippingHeight) - screenHeight;
-		
-	}
-
-	BYTE * screenPnter = screen + (int)(x + y * screenWidth) * 4;
-	BYTE *texturePnter = textureData + ((texturePosX +t_posX)+ (texturePosY +t_posY) * textureWidth) * 4;
-
-	int endOfLineScreenIncrement = (screenWidth - clippingWidth+ t_posX) * 4;
-	int endOfTextureIncrement = (textureWidth - clippingWidth+ t_posX) * 4;
-
-
-	
-	for (int row = t_posY; row < clippingHeight ; row++)
-	{
-
-		for (int col = t_posX; col < clippingWidth; col++)
-		{
-			BYTE alpha = texturePnter[3];
-
-			if (alpha == 255)
-			{
-				memcpy(screenPnter, texturePnter, 4);
-
-			}
-			else if (alpha > 0)
-			{
-				BYTE blue = texturePnter[0];
-				BYTE green = texturePnter[1];
-				BYTE red = texturePnter[2];
-
-				//gives value between 0 and 1;
-				float mod = (float)alpha / 255.0f;
-				screenPnter[0] = screenPnter[0] + ((alpha*(blue - screenPnter[0])) >> 8);
-				screenPnter[1] = screenPnter[1] + ((alpha*(green - screenPnter[1])) >> 8);
-				screenPnter[2] = screenPnter[2] + ((alpha*(red - screenPnter[2])) >> 8);
-			}
-
-
-
-			texturePnter += 4;
-			screenPnter += 4;
-
-		}
-
-
-		screenPnter += endOfLineScreenIncrement;
-		texturePnter += endOfTextureIncrement;
-	}
-	
-}
 
 bool Graphics::Update()
 {
@@ -171,40 +50,75 @@ bool Graphics::Update()
 }
 
 
-void Graphics::CreateSprite(std::string name, int x, int y, int spritesInCol, int spritesInRow)
+bool Graphics::CreateSprite(std::string name, int x, int y, int spritesInCol, int spritesInRow, std::string path)
 {
-	Sprite *spritePntr = new Sprite(name, x, y, spritesInCol, spritesInRow);
-	
-	sprites.insert(std::pair<std::string, Sprite*>(name, spritePntr) );
-}
 
-void Graphics::CreateTileSet(std::string name,int tilesInCol, int tilesInRow, std::string path)
-{
-	Tileset *tempTileset = new Tileset(tilesInCol, tilesInRow);
+	Sprite *spritePntr  = new Sprite(name, x, y, spritesInCol, spritesInRow);
 
-	tempTileset->LoadTexture(path);
+	sprites.insert(std::pair<std::string, Sprite*>(name, spritePntr));
 
-	tilesets.insert(std::pair<std::string, Tileset*>(name, tempTileset));
-
-}
-
-bool Graphics::LoadTexture(std::string name, std::string path)const
-{
 	if (sprites.at(name)->LoadTexture(path))
 	{
+		
 		return true;
 	}
 
+	return false;
+	
+}
+
+
+bool Graphics::CreateTileset(std::string name, int spritesInCol, int spritesInRow, std::string path)
+{
+
+	Tileset * tempTileset = new Tileset( spritesInCol, spritesInRow);
+
+	tilesets.insert(std::pair<std::string, Tileset*>(name, tempTileset));
+
+	if (tilesets.at(name)->LoadTexture(path))
+	{
+
+		return true;
+	}
 
 	return false;
+
+}
+
+void Graphics::MakeTiles(std::string name)
+{
+	tilesets.at(name)->MakeTiles();
+}
+
+void Graphics::GenerateTileMap(std::string name)
+{
+	tilesets.at(name)->CreateTileMap();
+}
+
+void Graphics::DrawTilemap(std::string name)
+{
+	tilesets.at(name)->DrawTile(screen, screenWidth, screenHeight);
+}
+
+
+
+
+
+
+void Graphics::Draw(std::string name, RenderType flag)
+{
+	sprites.at(name)->Draw(flag, screen, screenWidth, screenHeight);
 }
 
 Graphics::~Graphics()
 {
-	for (auto sprite : sprites)
-		delete sprite.second;
+	for (auto s : sprites)
+	{
+		delete s.second;
+	}
 	for (auto t : tilesets)
+	{
 		delete t.second;
-	
+	}
 	cout << "Detructor" << endl;
 }

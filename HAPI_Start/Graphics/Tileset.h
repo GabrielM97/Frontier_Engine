@@ -1,37 +1,33 @@
 #pragma once
 
-#include <vector>
-#include "Sprite.h"
-#include <string>
+#include <HAPI_lib.h>
 #include <unordered_map>
+#include <vector>
+#include "Tile.h"
 
 
-
-using namespace std;
-
-
+using namespace HAPISPACE;
 class Tileset
 {
 public:
-	
-	bool LoadTexture(string path);
-	void CreateTiles();
-	Tileset() = default;
-	Tileset(int tilesInX, int tilesInY) : tilesInCol(tilesInX), tilesInRow(tilesInY) {};
-	void draw(Graphics * window);
-	vector<Sprite> GetTile() { return tilemap; };
-	void GenerateTilemap();
+	Tileset();
+	Tileset(int tIncol, int tInRow );
+	bool LoadTexture(std::string name);
+	void MakeTiles();
+	void CreateTileMap();
+	void DrawTile(BYTE * screen, int screenWidth, int screemHeight);
+
 	~Tileset();
 
 private:
-	int tileWidth;
-	int tileHeight;
-	int tilesInCol;
-	int tilesInRow;
-	BYTE * Data{ nullptr };
+	BYTE * textureData{ nullptr };
 	int textureWidth;
 	int textureHeight;
-	unordered_map<int , Sprite*> tiles;
-	vector<Sprite> tilemap;
+	int tilesInCol;
+	int tilesInRow;
+	int tileWidth;
+	int tileHeight;
+	unordered_map<int, Tile*> tileset;
+	vector<Tile*> tilemap;
 };
 

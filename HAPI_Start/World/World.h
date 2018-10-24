@@ -23,7 +23,7 @@ private:
 	const int SCREENHEIGHT = 608;
 	Graphics *window{nullptr};
 	DWORD lastTick = 0;
-	unsigned int elaspsTime{ 100 };
+	unsigned int elaspsTime{ 150 };
 
 };
 
