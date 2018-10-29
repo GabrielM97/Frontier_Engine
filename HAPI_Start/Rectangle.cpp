@@ -26,6 +26,21 @@ namespace GM
 			bottom = otherRect.bottom;
 	}
 
+	bool Rectangle::Intersects(Rectangle & otherRect)
+	{
+
+
+		if (left >= otherRect.left && left <= otherRect.right || right >= otherRect.left && right <= otherRect.right)
+		{
+			if (top >= otherRect.top && top <= otherRect.bottom || bottom >= otherRect.top && bottom <= otherRect.bottom)
+			{
+				return true;
+			}
+		}
+	
+		return false;
+	}
+
 	Rectangle::~Rectangle()
 	{
 	}

@@ -57,6 +57,31 @@ namespace GM
 			return *this;
 		}
 
+		bool operator >= (const Vector2D& rhs)
+		{
+			if (x >= rhs.x && y >= rhs.y)
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+
+		}
+		bool operator <= (const Vector2D& rhs)
+		{
+			if (x <= rhs.x && y <= rhs.y)
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+
+		}
+
 		bool operator ==(const Vector2D& rhs)
 		{
 			if (x == rhs.x && y == rhs.y)

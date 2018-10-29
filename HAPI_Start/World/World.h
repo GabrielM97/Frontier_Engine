@@ -2,11 +2,31 @@
 #include <HAPI_lib.h>
 #include <ctime>
 #include <iostream>
+#include "../SourceFiles/Vector2D.h"
+#include <thread>
 
 class Graphics;
+class Entity;
 
+
+using namespace GM;
 using namespace HAPISPACE;
 using namespace std;
+
+struct Hit
+{
+	bool isHit = false;
+	std::string direction = " ";
+
+	int calcDirection()
+	{
+		if (direction == "south" || direction == "east")
+			return -1;
+		if (direction == "north" || direction == "west")
+			return 1;
+	}
+};
+
 class World
 {
 public:
@@ -15,7 +35,8 @@ public:
 	bool SetupGameWorld();
 	void DisplayLogo();
 	void createGameWorld();
-	void CheckUserInput(std::string name);
+	Hit checkCollision(std::string n1, int n2);
+	void CheckUserInput(std::string name, int controllerId);
 	virtual ~World();
 
 private:
@@ -24,6 +45,10 @@ private:
 	Graphics *window{nullptr};
 	DWORD lastTick = 0;
 	unsigned int elaspsTime{ 150 };
+	Vector2D velocity;
+	Hit hit;
+	bool collided = false;
+
 
 };
 

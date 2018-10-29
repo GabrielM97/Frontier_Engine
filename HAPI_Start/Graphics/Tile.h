@@ -22,6 +22,8 @@ public:
 
 	void Draw(BYTE * textureData, int textureWidth, int textureHeight, BYTE * screen, int screenwidth, int screenheight, int tilesInCol, int tilesInRow);
 	void BlitClipping(BYTE * textureData, BYTE * screen, int screenWidth, int screenHeight, int texturePosX, int texturePosY, int textureWidth, int clippingWidth, int clippingHeight, float x, float y) const;
+	void CreateCollisionBox(int x, int y, int width, int height);
+	Rectangle GetCollisionBox() { return collisionBox; };
 	~Tile();
 
 
@@ -31,5 +33,6 @@ private:
 	Vector2D texturePosition;
 	bool isCollidable{ false };
 	Rectangle bounds;
+	Rectangle collisionBox;
 };
 

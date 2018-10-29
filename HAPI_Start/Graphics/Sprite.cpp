@@ -215,16 +215,20 @@ void Sprite::Animate(Direction dir, State s)
 	switch (dir)
 	{
 	case Direction::SOUTH:
-		texturePosition.y = 0;
+		texturePosition.y = 1;
+		dir = Direction::SOUTH;
 		break;
 	case Direction::NORTH:
-		texturePosition.y = 1;
+		texturePosition.y = 0;
+		dir = Direction::NORTH;
 		break;
 	case Direction::WEST:
 		texturePosition.y = 2;
+		dir = Direction::WEST;
 		break;
 	case Direction::EAST:
 		texturePosition.y = 3;
+		dir = Direction::EAST;
 		break;
 
 	default:
@@ -235,11 +239,14 @@ void Sprite::Animate(Direction dir, State s)
 	{
 	case State::moving:
 		texturePosition.x++;
+		state = State::moving;
 		break;
 	case State::stop:
 		texturePosition.x = 0;
+		state = State::stop;
 		break;
 	case State::battle:
+		state = State::battle;
 		cerr << "Battle" << endl;
 		break;
 	

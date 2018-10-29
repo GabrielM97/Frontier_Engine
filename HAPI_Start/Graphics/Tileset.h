@@ -16,7 +16,7 @@ public:
 	void MakeTiles();
 	void CreateTileMap();
 	void DrawTile(BYTE * screen, int screenWidth, int screemHeight);
-
+	vector<Tile*> GetTiles() { return tilemap;  };
 	~Tileset();
 
 private:

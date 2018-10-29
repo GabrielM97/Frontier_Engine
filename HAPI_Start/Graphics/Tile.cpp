@@ -25,7 +25,7 @@ Tile::Tile(std::string id, int x, int y, int texPosX, int texPosY, bool collidab
 void Tile::Draw(BYTE * textureData, int textureWidth, int textureHeight,  BYTE* screen, int screenwidth, int screenheight, int tilesInCol, int tilesInRow)
 {
 	SetBounds( textureWidth, textureHeight, tilesInCol, tilesInRow);
-
+	CreateCollisionBox(position.x, position.y, bounds.Width(), bounds.Height() );
 	BlitClipping(textureData, screen, screenwidth, screenheight, bounds.left, bounds.top, textureWidth, bounds.Width(),
 		bounds.Height(), position.x, position.y);
 
@@ -34,6 +34,7 @@ void Tile::Draw(BYTE * textureData, int textureWidth, int textureHeight,  BYTE* 
 
 void Tile::BlitClipping(BYTE * textureData, BYTE* screen, int screenWidth, int screenHeight, int  texturePosX, int texturePosY, int textureWidth, int  clippingWidth, int  clippingHeight, float x, float y)const
 {
+
 
 
 	int t_posX = 0;
@@ -108,6 +109,15 @@ void Tile::BlitClipping(BYTE * textureData, BYTE* screen, int screenWidth, int s
 	}
 
 }
+
+void Tile::CreateCollisionBox(int x, int y, int width, int height)
+{
+	collisionBox.left = x;
+	collisionBox.top = y;
+	collisionBox.right = x + width;
+	collisionBox.bottom = y + height;
+}
+
 Tile::~Tile()
 {
 }

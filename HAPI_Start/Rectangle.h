@@ -1,5 +1,5 @@
 #pragma once
-
+#include <iostream>
 namespace GM
 {
 	class Rectangle
@@ -17,6 +17,8 @@ namespace GM
 		void Translate(int dx, int dy);
 
 		void clipToRect(const Rectangle &otherRect);
+
+		bool Intersects(Rectangle &otherRect);
 
 		virtual ~Rectangle();
 	};

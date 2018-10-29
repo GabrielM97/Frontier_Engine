@@ -18,20 +18,22 @@ enum class RenderType
 };
 enum class Direction
 {
-	SOUTH = 0,
-	NORTH = 1,
+	SOUTH = 1,
+	NORTH = 0,
 	WEST = 2,
 	EAST = 3
 
 };
 enum class State
 {
-	moving = 0, stop = 1, battle = 3
+	moving = 0, stop = 1, battle = 3, running = 4
 };
 
 class Sprite
 {
 public:
+	State state;
+	Direction dir = Direction::SOUTH;
 	Sprite();
 	Sprite(string name, int x, int y, int spritesInCol, int spritesInRow);
 	void SetAttributes(string id, int texPosX, int texPosY, BYTE* data, int tw, int th, int tilesInCol, int tilesInRow );
@@ -72,6 +74,7 @@ protected:
 	BYTE * textureData{ nullptr };
 	int textureWidth;
 	int textureHeight;
+	
 	Rectangle bounds;
 	Rectangle collisionBox;
 	bool isCollidable{ false };

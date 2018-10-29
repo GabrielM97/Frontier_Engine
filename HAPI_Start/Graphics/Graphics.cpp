@@ -101,10 +101,6 @@ void Graphics::DrawTilemap(std::string name)
 }
 
 
-
-
-
-
 void Graphics::Draw(std::string name, RenderType flag)
 {
 	sprites.at(name)->Draw(flag, screen, screenWidth, screenHeight);

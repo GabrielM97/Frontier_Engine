@@ -10,7 +10,7 @@
 using namespace std;
 using namespace HAPISPACE;
 
-
+class Tile;
 
 class Graphics
 {
@@ -27,8 +27,10 @@ public:
 	void MakeTiles(std::string name);
 	void GenerateTileMap(std::string name);
 	void DrawTilemap(std::string name);
+
 	Sprite* GetSprite(std::string name) { return sprites.at(name);};
 	Tileset* GetTileSet(std::string name) { return tilesets.at(name);};
+	vector<Tile*> GetTiles(std::string name) { return tilesets.at(name)->GetTiles(); };
 
 	void Draw(std::string name, RenderType flag);
 	
