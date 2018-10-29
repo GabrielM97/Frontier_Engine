@@ -1,3 +1,35 @@
+
+/*
+Gabriel Menezes
+Milestone 2 < Version 1.2.0 > <22 / 10 / 2018>
+----------------------------------------
+
+New Functionality
+---------------- -
+
++blitting sprites
++clipping textures
++blits to alpha
++animation
++movement
+
+Code Additions
+--------------
++Graphics class
++Sprite class
+
++CheckUserInput(std::string name)
+
+
+Test
+----
++Loading textures no alpha - works
++attempting to load texture with wrong path - works
++redering textures with alpha - works
++redering textures with varying alpha - works
++moving sprites around map - works
+*/
+
 #include "Sprite.h"
 #include "..\Rectangle.h"
 
@@ -201,8 +233,8 @@ bool Sprite::LoadTexture(string path)
 
 	if (!HAPI.LoadTexture(path, &textureData, textureWidth, textureHeight))
 	{
-		HAPI.UserMessage("Error texture not loaded correctly...", "Error");
-		cerr << "Error texture not loaded correctly..." << endl;
+		HAPI.UserMessage("Error texture not loaded correctly...\nPath:" + path, "Error");
+		HAPI.Close();
 		return false;
 	}
 

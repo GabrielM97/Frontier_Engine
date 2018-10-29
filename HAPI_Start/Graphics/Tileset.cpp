@@ -17,8 +17,8 @@ bool Tileset::LoadTexture(std::string name)
 
 	if (!HAPI.LoadTexture(name, &textureData, textureWidth, textureHeight))
 	{
-		HAPI.UserMessage("Error texture not loaded correctly...", "Error");
-		
+		HAPI.UserMessage("Error texture not loaded correctly...\nPath:"+name, "Error");
+		HAPI.Close();
 		return false;
 	}
 

@@ -36,7 +36,7 @@ public:
 	void DisplayLogo();
 	void createGameWorld();
 	Hit checkCollision(std::string n1, int n2);
-	void CheckUserInput(std::string name, int controllerId);
+	void CheckUserInput(std::string name, int controllerId, std::string map = " ");
 	virtual ~World();
 
 private:

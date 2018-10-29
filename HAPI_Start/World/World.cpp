@@ -3,7 +3,6 @@
 #include "Entity.h"
 
 
-
 World::World()
 {
 	window = new Graphics();
@@ -50,6 +49,7 @@ bool World::SetupGameWorld()
 	return true;
 }
 
+
 void World::DisplayLogo()
 {
 	time_t start = time(0);
@@ -81,13 +81,11 @@ void World::createGameWorld()
 			
 			window->DrawTilemap("map1");
 			window->Draw("Lucas", RenderType::TILE);
-			CheckUserInput("Lucas", 0);
+			CheckUserInput("Lucas", 0, "map1");
 
 			window->Draw("p2", RenderType::TILE);
-			//CheckUserInput("p2", 1);
+			CheckUserInput("p2", 1, "map1");
 
-			
-			
 			lastTick = HAPI.GetTime();
 		
 		}
@@ -95,6 +93,9 @@ void World::createGameWorld()
 		
 	}
 }
+#pragma endregion
+
+#pragma region Collisiions
 Hit World::checkCollision(std::string n1, int n2)
 {
 	Hit checkHit;
@@ -129,9 +130,8 @@ Hit World::checkCollision(std::string n1, int n2)
 }
 #pragma endregion
 
-
 #pragma region USERINPUT
-void World::CheckUserInput(std::string name, int controllerID)
+void World::CheckUserInput(std::string name, int controllerID, std::string map )
 {
 	const HAPI_TKeyboardData &keyData = HAPI.GetKeyboardData();
 	bool isRunning = false;
@@ -231,10 +231,10 @@ void World::CheckUserInput(std::string name, int controllerID)
 #pragma region ControllerInput
 //TODO: Get controller input
 	const HAPI_TControllerData& data = HAPI.GetControllerData(controllerID);
+
 	if (data.isAttached)
 	{
 		
-
 		double valueX = data.analogueButtons[HK_ANALOGUE_LEFT_THUMB_X];
 		double valueY = data.analogueButtons[HK_ANALOGUE_LEFT_THUMB_Y];
 		
@@ -316,25 +316,28 @@ void World::CheckUserInput(std::string name, int controllerID)
 
 	window->GetSprite(name)->SetPos(window->GetSprite(name)->GetPos().x + velocity.x, window->GetSprite(name)->GetPos().y + velocity.y);
 
-
-	for (int i = 0; i < window->GetTiles("map1").size(); i++)
+	if (map != " ")
 	{
-
-		if (window->GetTiles("map1").at(i)->GetCollidable())
+		for (int i = 0; i < window->GetTiles(map).size(); i++)
 		{
 
-			hit = checkCollision("Lucas", i);
-			if (hit.isHit)
+			if (window->GetTiles(map).at(i)->GetCollidable())
 			{
-				window->GetSprite(name)->SetPos(prevPos.x, prevPos.y);
-				hit.isHit = false;
-				break;
-			}
-			
-				
-		}
 
+				hit = checkCollision(name, i);
+				if (hit.isHit)
+				{
+					window->GetSprite(name)->SetPos(prevPos.x, prevPos.y);
+					hit.isHit = false;
+					break;
+				}
+
+
+			}
+
+		}
 	}
+	
 #pragma endregion	
 	
 		
