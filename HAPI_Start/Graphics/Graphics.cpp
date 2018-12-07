@@ -53,7 +53,7 @@ bool Graphics::Update()
 bool Graphics::CreateSprite(std::string name, int x, int y, int spritesInCol, int spritesInRow, std::string path)
 {
 
-	Sprite *spritePntr  = new Sprite(name, x, y, spritesInCol, spritesInRow);
+	Sprite *spritePntr  = new Sprite(name, spritesInCol, spritesInRow);
 
 	sprites.insert(std::pair<std::string, Sprite*>(name, spritePntr));
 
@@ -68,42 +68,21 @@ bool Graphics::CreateSprite(std::string name, int x, int y, int spritesInCol, in
 }
 
 
-bool Graphics::CreateTileset(std::string name, int spritesInCol, int spritesInRow, std::string path)
+
+
+
+void Graphics::Draw(std::string name, RenderType flag, int dir, int state, float posX, float posY)
 {
-
-	Tileset * tempTileset = new Tileset( spritesInCol, spritesInRow);
-
-	tilesets.insert(std::pair<std::string, Tileset*>(name, tempTileset));
-
-	if (tilesets.at(name)->LoadTexture(path))
-	{
-
-		return true;
-	}
-
-	return false;
-
+	if(dir != 4 || state != 3)
+		sprites.at(name)->Animate(dir, state);
+	sprites.at(name)->Draw(flag, screen, screenWidth, screenHeight, posX, posY);
 }
 
-void Graphics::MakeTiles(std::string name)
+void Graphics::Draw(std::string name, RenderType flag, int dir, int state, float posX, float posY, Vector2D texturePos)
 {
-	tilesets.at(name)->MakeTiles();
-}
-
-void Graphics::GenerateTileMap(std::string name)
-{
-	tilesets.at(name)->CreateTileMap();
-}
-
-void Graphics::DrawTilemap(std::string name)
-{
-	tilesets.at(name)->DrawTile(screen, screenWidth, screenHeight);
-}
-
-
-void Graphics::Draw(std::string name, RenderType flag)
-{
-	sprites.at(name)->Draw(flag, screen, screenWidth, screenHeight);
+	if (dir != 4 || state != 3)
+		sprites.at(name)->Animate(dir, state);
+	sprites.at(name)->Draw(flag, screen, screenWidth, screenHeight, posX, posY, texturePos);
 }
 
 Graphics::~Graphics()
@@ -112,9 +91,6 @@ Graphics::~Graphics()
 	{
 		delete s.second;
 	}
-	for (auto t : tilesets)
-	{
-		delete t.second;
-	}
+	
 	cout << "Detructor" << endl;
 }

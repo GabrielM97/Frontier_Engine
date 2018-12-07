@@ -4,13 +4,15 @@
 #include <vector>
 #include <unordered_map>
 #include "Sprite.h"
-#include "..\Rectangle.h"
-#include "Tileset.h"
+#include "..\\Add_On\Rectangle.h"
+
 
 using namespace std;
 using namespace HAPISPACE;
 
-class Tile;
+
+
+
 
 class Graphics
 {
@@ -22,17 +24,9 @@ public:
 	bool Update();
 	bool CreateSprite(std::string name, int x, int y, int spritesInCol, int spritesInRow, std::string path);
 
-	bool CreateTileset(std::string name, int spritesInCol, int spritesInRow, std::string path);
+	void Draw(std::string name, RenderType flag, int dir, int state, float posX, float posY);
 
-	void MakeTiles(std::string name);
-	void GenerateTileMap(std::string name);
-	void DrawTilemap(std::string name);
-
-	Sprite* GetSprite(std::string name) { return sprites.at(name);};
-	Tileset* GetTileSet(std::string name) { return tilesets.at(name);};
-	vector<Tile*> GetTiles(std::string name) { return tilesets.at(name)->GetTiles(); };
-
-	void Draw(std::string name, RenderType flag);
+	void Draw(std::string name, RenderType flag, int dir, int state, float posX, float posY, Vector2D texturePos);
 	
 	virtual ~Graphics();
 
@@ -44,7 +38,7 @@ private:
 	int screenHeight;
 	BYTE *screen;
 	unordered_map<std::string, Sprite*> sprites;
-	unordered_map<std::string, Tileset*> tilesets;
+
 
 
 

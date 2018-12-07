@@ -1,6 +1,10 @@
+
 #include "World.h"
 #include "..\Graphics\Graphics.h"
 #include "Entity.h"
+#include "PlayerEntity.h"
+#include "TileMapEntity.h"
+
 
 
 World::World()
@@ -30,19 +34,24 @@ bool World::SetupGameWorld()
 		return false;
 	}
 
-	window->CreateSprite("Lucas", 100, 200, 4, 4, "Data\\player.png");
+	window->CreateSprite("Lucas", 0, 0, 4, 4, "Data\\character.png");
+	window->CreateSprite("battle", 0, 0, 4, 4, "Data\\characterBattle.png");
+	
+	playerEntities.push_back(new PlayerEntity("Lucas", { 200,200 }, 2, 4, 14, 24, 0));
+	playerEntities.at(0)->AddSpriteSheetId("battle");
 
-	window->GetSprite("Lucas")->SetIsCollidable(true);
 
-	window->CreateSprite("p2", 600, 200, 4, 4, "Data\\PlayerBlue.png");
-
-	window->GetSprite("p2")->SetIsCollidable(true);
+	
 
 	window->CreateSprite("logo", 0, 0, 4, 4, "Data\\HorizonEngine-Logo.png");
 
-	window->CreateTileset("map1", 14, 6, "Data\\scifitiles-sheet.png");
-	window->MakeTiles("map1");
-	window->GenerateTileMap("map1");
+	window->CreateSprite("map1",0, 0,  40, 36, "Data\\Overworld.png");
+	tileentities.push_back(new TileMapEntity("map1", 40, 36, 640, 576 ));
+	tileentities.at(0)->MakeTile();
+	tileentities.at(0)->CreateTileMap();
+
+	entities.push_back(tileentities.at(0));
+	entities.push_back(playerEntities.at(0));
 
 	velocity.setPos(0, 0);
 	HAPI.SetShowFPS(true);
@@ -59,7 +68,7 @@ void World::DisplayLogo()
 	while (window->Update() && seconds_since_start <4)
 	{
 		window->ClearScreen(34, 54, 86, 255);
-		window->Draw("logo", RenderType::TEXTURE);
+		window->Draw("logo", RenderType::TEXTURE, 0, 0, 0, 0);
 
 		seconds_since_start = difftime(time(0), start);
 	}
@@ -74,281 +83,135 @@ void World::createGameWorld()
 
 	while (window->Update())
 	{
-		if (HAPI.GetTime() - lastTick >= elaspsTime)
+
+		if (HAPI.GetTime() - lastTick >= simulationTime)
 		{
-			
+			for (auto *e : entities)
+			{
+				
+				if(e->GetType() == Type::Player)
+					CheckUserInput(e, e->controllerID);
 
-			
-			window->DrawTilemap("map1");
-			window->Draw("Lucas", RenderType::TILE);
-			CheckUserInput("Lucas", 0, "map1");
+				e->Update();
 
-			window->Draw("p2", RenderType::TILE);
-			CheckUserInput("p2", 1, "map1");
+				if (checkCollision(e)) {
+					PlayerEntity * p = (PlayerEntity*)e;
+					p->SetState(State::stop);
+				}
+
+				e->Render(window);
+				
+			}
 
 			lastTick = HAPI.GetTime();
-		
 		}
 
-		
 	}
 }
+
+
 #pragma endregion
 
 #pragma region Collisiions
-Hit World::checkCollision(std::string n1, int n2)
+bool World::checkCollision(Entity * e)
 {
-	Hit checkHit;
-	
-	if (window->GetSprite(n1)->GetCollisitionBox().Intersects(window->GetTiles("map1").at(n2)->GetCollisionBox()))
+
+	for (auto *entity : entities)
 	{
-		
-		switch (window->GetSprite(n1)->dir)
+
+		if (entity->GetType() == Type::Map)
 		{
-		case Direction::SOUTH:
-			checkHit.direction = "north";
-			checkHit.isHit = true;
-			break;
-		case Direction::NORTH:
-			checkHit.direction = "south";
-			checkHit.isHit = true;
-			break;
-		case Direction::EAST:
-			checkHit.direction = "west";
-			checkHit.isHit = true;
-			break;
-		case Direction::WEST:
-			checkHit.direction = "east";
-			checkHit.isHit = true;
-			break;
-
+			TileMapEntity * m = (TileMapEntity*)entity;
+			for (auto & t : m->getTile())
+			{
+				if (t->isCollidable && e->isCollidable)
+				{
+					if (e->collisionBox.Intersects(t->collisionBox))
+					{
+						cout << " Collision t" << endl;
+						return true;
+					}
+						
+				}
+			}
 		}
-		
-	}
+		else
+		{
+			if (entity->isCollidable && e->isCollidable  && e != entity)
+			{
+				if (e->collisionBox.Intersects(entity->collisionBox))
+				{
+					cout << " Collision  p" << endl;
+					return true;
+				}
+					
+			}
+		}
 
-	return checkHit;
+	}
+	return false;
 }
 #pragma endregion
 
 #pragma region USERINPUT
-void World::CheckUserInput(std::string name, int controllerID, std::string map )
+void World::CheckUserInput(Entity *e, int controllerID)
 {
+	PlayerEntity* player = (PlayerEntity*)e;
 	const HAPI_TKeyboardData &keyData = HAPI.GetKeyboardData();
-	bool isRunning = false;
-	
-	
-#pragma region InputControls
-#pragma region KEYBAORD INPUT
 
-	Vector2D prevPos;
-	prevPos.setPos(window->GetSprite(name)->GetPos().x - velocity.x, window->GetSprite(name)->GetPos().y - velocity.y);
-
-	if (window->GetSprite(name)->state != State::stop)
-	{
-		if (keyData.scanCode[HK_DOWN])
-		{
-
-			window->GetSprite(name)->Animate(Direction::SOUTH, State::moving);
-			if (!isRunning)
-			{
-				velocity.setPos(0, 5);
-			}
-			else
-			{
-				velocity.setPos(0, 15);
-			}
-			window->GetSprite(name)->dir = Direction::SOUTH;
-		}
-		else if (keyData.scanCode[HK_UP])
-		{
-			window->GetSprite(name)->Animate(Direction::NORTH, State::moving);
-			if (!isRunning)
-			{
-				velocity.setPos(0, -5);
-			}
-			else
-			{
-				velocity.setPos(0, -15);
-			}
-			window->GetSprite(name)->dir = Direction::NORTH;
-		}
-		else if (keyData.scanCode[HK_LEFT])
-		{
-			window->GetSprite(name)->Animate(Direction::WEST, State::moving);
-			if (!isRunning)
-			{
-				velocity.setPos(-5, 0);
-			}
-			else
-			{
-				velocity.setPos(-15, 0);
-			}
-			window->GetSprite(name)->dir = Direction::WEST;
-		}
-		else if (keyData.scanCode[HK_RIGHT])
-		{
-			window->GetSprite(name)->Animate(Direction::EAST, State::moving);
-			if (!isRunning)
-			{
-				velocity.setPos(5, 0);
-				
-			}
-			else
-			{
-				velocity.setPos(15, 0);
-				
-			}
-			window->GetSprite(name)->dir = Direction::EAST;
-		}
-		else
-		{
-			velocity.setPos(0, 0);
-		}
-	
-		
-		
-		if (keyData.scanCode[HK_SPACE])
-		{
-			isRunning = true;
-			
-			elaspsTime = { 50 };
-		}
-		else
-		{
-			isRunning = false;
-			
-			elaspsTime = { 100 };
-		}
-
-		
-		
-
-	}
-
-
-#pragma endregion
-	
-#pragma region ControllerInput
-//TODO: Get controller input
 	const HAPI_TControllerData& data = HAPI.GetControllerData(controllerID);
 
-	if (data.isAttached)
+	
+	
+	double valueX = data.analogueButtons[HK_ANALOGUE_LEFT_THUMB_X];
+	double valueY = data.analogueButtons[HK_ANALOGUE_LEFT_THUMB_Y];
+
+	if (keyData.scanCode[HK_SPACE] || data.analogueButtons[HK_ANALOGUE_RIGHT_TRIGGER] > 0)
 	{
-		
-		double valueX = data.analogueButtons[HK_ANALOGUE_LEFT_THUMB_X];
-		double valueY = data.analogueButtons[HK_ANALOGUE_LEFT_THUMB_Y];
-		
-
-		if (valueX < -30000 )
-		{
-			
-			window->GetSprite(name)->Animate(Direction::WEST, State::moving);
-			if (!isRunning)
-			{
-				velocity.setPos(-5,0);
-			}
-			else
-			{
-				velocity.setPos(-15, 0);
-			}
-			window->GetSprite(name)->dir = Direction::WEST;
-		}
-		else if (valueX > 30000)
-		{
-			
-			window->GetSprite(name)->Animate(Direction::EAST, State::moving);
-			if (!isRunning)
-			{
-				velocity.setPos(5, 0);
-
-			}
-			else
-			{
-				velocity.setPos(15,0);
-
-			}
-			window->GetSprite(name)->dir = Direction::EAST;
-		}else if (valueY > 30000)
-		{
-			
-			window->GetSprite(name)->Animate(Direction::NORTH, State::moving);
-			if (!isRunning)
-			{
-				velocity.setPos(0, -5);
-			}
-			else
-			{
-				velocity.setPos(0, -15);
-			}
-			window->GetSprite(name)->dir = Direction::NORTH;
-		}
-		else if(valueY < -30000)
-		{
-			
-			window->GetSprite(name)->Animate(Direction::SOUTH, State::moving);
-			if (!isRunning)
-			{
-				velocity.setPos(0, 5);
-			}
-			else
-			{
-				velocity.setPos(0, 15);
-			}
-			window->GetSprite(name)->dir = Direction::SOUTH;
-
-		}
-
-		if (data.analogueButtons[HK_ANALOGUE_RIGHT_TRIGGER] > 0)
-		{
-			isRunning = true;
-
-			elaspsTime = { 50 };
-		}
-		else
-		{
-			isRunning = false;
-
-			elaspsTime = { 100 };
-		}
-		
+		player->SetState(State::running);
 	}
-#pragma endregion
-
-	window->GetSprite(name)->SetPos(window->GetSprite(name)->GetPos().x + velocity.x, window->GetSprite(name)->GetPos().y + velocity.y);
-
-	if (map != " ")
+	else
 	{
-		for (int i = 0; i < window->GetTiles(map).size(); i++)
-		{
-
-			if (window->GetTiles(map).at(i)->GetCollidable())
-			{
-
-				hit = checkCollision(name, i);
-				if (hit.isHit)
-				{
-					window->GetSprite(name)->SetPos(prevPos.x, prevPos.y);
-					hit.isHit = false;
-					break;
-				}
-
-
-			}
-
-		}
+		player->SetState(State::moving);
 	}
-	
-#pragma endregion	
-	
-		
-	
+
+	if (keyData.scanCode[HK_DOWN] || valueY < -30000)
+	{
+		player->SetDirection(Direction::SOUTH);
+	}
+	else if (keyData.scanCode[HK_UP] || valueY > 30000)
+	{
+		player->SetDirection(Direction::NORTH);
+	}
+	else if (keyData.scanCode[HK_LEFT] || valueX < -30000)
+	{
+		player->SetDirection(Direction::WEST);
+	}
+	else if (keyData.scanCode[HK_RIGHT] || valueX > 30000)
+	{
+		player->SetDirection(Direction::EAST);
+	}
+	else
+	{
+		if (player->GetState() != State::battle)
+			player->SetState(State::stop);
+	}
+
+	if (keyData.scanCode['X'] || data.digitalButtons[HK_DIGITAL_X])
+	{
+		player->SetState(State::battle);
+	}
+
 }
 #pragma endregion
 
-
-
-
 World::~World()
 {
+
+	
+
+	for (auto e : entities)
+		delete e;
+
 	delete window;
 }

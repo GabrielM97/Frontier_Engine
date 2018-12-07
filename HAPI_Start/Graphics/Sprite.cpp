@@ -1,67 +1,56 @@
 
 /*
 Gabriel Menezes
-Milestone 2 < Version 1.2.0 > <22 / 10 / 2018>
+Milestone 3 < Version 1.3.0 > <05 / 11 / 2018>
 ----------------------------------------
 
 New Functionality
 ---------------- -
 
-+blitting sprites
-+clipping textures
-+blits to alpha
-+animation
-+movement
++Clipping to the screen
++Animation 
+
 
 Code Additions
 --------------
-+Graphics class
-+Sprite class
-
-+CheckUserInput(std::string name)
+Rectangle Class
+	clipToRect(const Rectangle & otherRect)
+	Translate(int dx, int dy)
+	Intersects(Rectangle & otherRect)
+Enum Class direction
+Enum class State
+Tileset Class
+TileClass
 
 
 Test
 ----
-+Loading textures no alpha - works
-+attempting to load texture with wrong path - works
-+redering textures with alpha - works
-+redering textures with varying alpha - works
-+moving sprites around map - works
+Able to walk off the screen of all side
+Be able to walk back into the screen
+The sprite animates correctly
+animation only happen when sprite is moving 
+Load a high number of sprites both in and out of the screen 1000 sprites
+
 */
 
 #include "Sprite.h"
-#include "..\Rectangle.h"
+#include "..\\Add_On\Rectangle.h"
 
 Sprite::Sprite()
 {
 	
 }
 
-Sprite::Sprite(string name, int x, int y,int spritesInCol, int spritesInRow )
+Sprite::Sprite(string name,int spritesInCol, int spritesInRow )
 {
 	this->spritesInCol = spritesInCol;
 	this->spritesInRow = spritesInRow;
 	this->name = name;
-	position.x = (float)x;
-	position.y = (float)y;
 	texturePosition.x = 0;
 	texturePosition.y = 0;
 	
 }
 
-void Sprite::SetAttributes(string id, int texPosX, int texPosY, BYTE * data, int tw, int th, int tilesInCol, int tilesInRow)
-{
-
-	name = id;
-	texturePosition.x = texPosX;
-	texturePosition.y = texPosY;
-	textureData = data;
-	textureWidth = tw;
-	textureHeight = th;
-	spritesInCol = tilesInCol;
-	spritesInRow = tilesInRow;
-}
 
 void Sprite::Blit(BYTE * textureData, BYTE* screen, int screenWidth, int & textureWidth, int & textureHeight, float x, float y)const
 {
@@ -89,7 +78,7 @@ void Sprite::Blit(BYTE * textureData, BYTE* screen, int screenWidth, int & textu
 				BYTE green = texturePnter[1];
 				BYTE red = texturePnter[2];
 
-				float mod = alpha / 255.0f;
+				//float mod = alpha / 255.0f;
 				screenPnter[0] = screenPnter[0] + ((alpha*(blue - screenPnter[0])) >> 8);
 				screenPnter[1] = screenPnter[1] + ((alpha*(green - screenPnter[1])) >> 8);
 				screenPnter[2] = screenPnter[2] + ((alpha*(red - screenPnter[2])) >> 8);
@@ -145,8 +134,46 @@ void Sprite::BlitClipping(BYTE * textureData, BYTE* screen, int screenWidth, int
 	int endOfLineScreenIncrement = (screenWidth - clippingWidth + t_posX) * 4;
 	int endOfTextureIncrement = (textureWidth - clippingWidth + t_posX) * 4;
 
+	if (x > 0 && x < screenWidth && y > 0 && y > screenHeight)
+	{
+		for (int row = t_posY; row < clippingHeight; row++)
+	{
+
+		for (int col = t_posX; col < clippingWidth; col++)
+		{
+			BYTE alpha = texturePnter[3];
+
+			if (alpha == 255)
+			{
+				memcpy(screenPnter, texturePnter, 4);
+
+			}
+			else if (alpha > 0)
+			{
+				BYTE blue = texturePnter[0];
+				BYTE green = texturePnter[1];
+				BYTE red = texturePnter[2];
+
+				//gives value between 0 and 1;
+				float mod = (float)alpha / 255.0f;
+				screenPnter[0] = screenPnter[0] + ((alpha*(blue - screenPnter[0])) >> 8);
+				screenPnter[1] = screenPnter[1] + ((alpha*(green - screenPnter[1])) >> 8);
+				screenPnter[2] = screenPnter[2] + ((alpha*(red - screenPnter[2])) >> 8);
+			}
 
 
+
+			texturePnter += 4;
+			screenPnter += 4;
+
+		}
+
+
+		screenPnter += endOfLineScreenIncrement;
+		texturePnter += endOfTextureIncrement;
+	}
+
+	}
 	for (int row = t_posY; row < clippingHeight; row++)
 	{
 
@@ -186,9 +213,9 @@ void Sprite::BlitClipping(BYTE * textureData, BYTE* screen, int screenWidth, int
 
 }
 
-void Sprite::BlitWithoutAlpha(BYTE * screen, int screenWidth)
+void Sprite::BlitWithoutAlpha(BYTE * screen, int screenWidth, float posX, float posY)
 {
-	BYTE *screenPnter = screen + (int)(position.x + position.y * screenWidth)*4;
+	BYTE *screenPnter = screen + (int)(posX + posY * screenWidth)*4;
 	BYTE * texturePnter = textureData;
 
 	for (int y = 0; y < textureHeight; y++)
@@ -201,10 +228,10 @@ void Sprite::BlitWithoutAlpha(BYTE * screen, int screenWidth)
 	}
 }
 
-void Sprite::Draw(RenderType flag, BYTE* screen, int screenwidth, int screenheight)
+void Sprite::Draw(RenderType flag, BYTE* screen, int screenwidth, int screenheight, float posX, float posY)
 {
 	SetBounds();
-	CreateCollisionBox(position.x, position.y, bounds.Width(), bounds.Height());
+	
 
 
 	switch (flag)
@@ -212,25 +239,52 @@ void Sprite::Draw(RenderType flag, BYTE* screen, int screenwidth, int screenheig
 
 	case RenderType::TILE:
 		BlitClipping(textureData, screen, screenwidth, screenheight, bounds.left, bounds.top, textureWidth, bounds.Width(),
-			bounds.Height(), position.x, position.y);
+			bounds.Height(), posX, posY);
 		break;
 	case RenderType::TEXTURE:
-		Blit(textureData, screen, screenwidth, textureWidth, textureHeight, position.x, position.y);
+		Blit(textureData, screen, screenwidth, textureWidth, textureHeight, posX, posY);
 		break;
 
 	case RenderType::NO_ALPHA:
-		BlitWithoutAlpha(screen, screenwidth);
+		BlitWithoutAlpha(screen, screenwidth, posX, posY);
 		break;
 	default:
-		BlitWithoutAlpha(screen, screenwidth);
+		BlitWithoutAlpha(screen, screenwidth, posX, posY);
 		break;
 	}
 	
 }
 
+void Sprite::Draw(RenderType flag, BYTE* screen, int screenwidth, int screenheight, float posX, float posY, Vector2D texturePos)
+{
+	SetBounds(texturePos);
+
+
+
+	switch (flag)
+	{
+
+	case RenderType::TILE:
+		BlitClipping(textureData, screen, screenwidth, screenheight, bounds.left, bounds.top, textureWidth, bounds.Width(),
+			bounds.Height(), posX, posY);
+		break;
+	case RenderType::TEXTURE:
+		Blit(textureData, screen, screenwidth, textureWidth, textureHeight, posX, posY);
+		break;
+
+	case RenderType::NO_ALPHA:
+		BlitWithoutAlpha(screen, screenwidth, posX, posY);
+		break;
+	default:
+		BlitWithoutAlpha(screen, screenwidth, posX, posY);
+		break;
+	}
+
+}
+
 bool Sprite::LoadTexture(string path)
 {
-
+	
 	if (!HAPI.LoadTexture(path, &textureData, textureWidth, textureHeight))
 	{
 		HAPI.UserMessage("Error texture not loaded correctly...\nPath:" + path, "Error");
@@ -242,48 +296,44 @@ bool Sprite::LoadTexture(string path)
 	
 }
 
-void Sprite::Animate(Direction dir, State s)
+void Sprite::Animate(int dir, int s)
 {
-	switch (dir)
+	if (dir != 4)
 	{
-	case Direction::SOUTH:
-		texturePosition.y = 1;
-		dir = Direction::SOUTH;
-		break;
-	case Direction::NORTH:
-		texturePosition.y = 0;
-		dir = Direction::NORTH;
-		break;
-	case Direction::WEST:
-		texturePosition.y = 2;
-		dir = Direction::WEST;
-		break;
-	case Direction::EAST:
-		texturePosition.y = 3;
-		dir = Direction::EAST;
-		break;
-
-	default:
-		cerr << "Something went wrong" << endl;
-		break;
+		texturePosition.y = dir;
 	}
-	switch (s)
+
+	unsigned int simulationTime{ 50 };
+	if(s == 3)
+		 simulationTime = 32 ;
+	else
+		 simulationTime= 16 ;
+
+	DWORD lastTick = 0;
+	if (HAPI.GetTime() - lastTick >= simulationTime)
 	{
-	case State::moving:
-		texturePosition.x++;
-		state = State::moving;
-		break;
-	case State::stop:
-		texturePosition.x = 0;
-		state = State::stop;
-		break;
-	case State::battle:
-		state = State::battle;
-		cerr << "Battle" << endl;
-		break;
-	
-	default:
-		break;
+
+		switch (s)
+		{
+		case 0:
+			texturePosition.x++;
+
+			break;
+
+		case 1:
+			texturePosition.x = 0;
+
+			break;
+
+		case 3:
+			texturePosition.x++;
+			break;
+
+		case 4:
+			texturePosition.x++;
+		default:
+			break;
+		}
 	}
 
 	if (texturePosition.x > spritesInCol)
@@ -302,13 +352,15 @@ void Sprite::SetBounds()
 	bounds.bottom = ((int)texturePosition.y *(textureHeight / spritesInRow)) + (textureHeight / spritesInRow);
 }
 
-void Sprite::CreateCollisionBox(int x, int y, int width, int height)
+
+void Sprite::SetBounds(Vector2D texturePos)
 {
-	collisionBox.left = x;
-	collisionBox.top = y;
-	collisionBox.right = x + width;
-	collisionBox.bottom = y + height;
+	bounds.left = (int)texturePos.x * (textureWidth / spritesInCol);
+	bounds.top = (int)texturePos.y*(textureHeight / spritesInRow);
+	bounds.right = ((int)texturePos.x *(textureWidth / spritesInCol)) + (textureWidth / spritesInCol);
+	bounds.bottom = ((int)texturePos.y *(textureHeight / spritesInRow)) + (textureHeight / spritesInRow);
 }
+
 
 Sprite::~Sprite()
 {

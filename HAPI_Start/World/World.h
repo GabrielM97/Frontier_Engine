@@ -2,12 +2,14 @@
 #include <HAPI_lib.h>
 #include <ctime>
 #include <iostream>
-#include "../SourceFiles/Vector2D.h"
+#include "../Add_On/Vector2D.h"
 #include <thread>
+#include <vector>
 
 class Graphics;
 class Entity;
-
+class PlayerEntity;
+class TileMapEntity;
 
 using namespace GM;
 using namespace HAPISPACE;
@@ -35,20 +37,24 @@ public:
 	bool SetupGameWorld();
 	void DisplayLogo();
 	void createGameWorld();
-	Hit checkCollision(std::string n1, int n2);
-	void CheckUserInput(std::string name, int controllerId, std::string map = " ");
+	bool checkCollision(Entity *e);
+	
+	
+	void CheckUserInput(Entity * e, int controllerID);
 	virtual ~World();
 
 private:
 	const int SCREENWIDTH = 800;
-	const int SCREENHEIGHT = 608;
+	const int SCREENHEIGHT = 600;
 	Graphics *window{nullptr};
 	DWORD lastTick = 0;
-	unsigned int elaspsTime{ 150 };
+	unsigned int simulationTime{ 16 };
 	Vector2D velocity;
 	Hit hit;
 	bool collided = false;
-
+	std::vector<PlayerEntity*> playerEntities;
+	std::vector<TileMapEntity*> tileentities;
+	std::vector<Entity*> entities;
 
 };
 

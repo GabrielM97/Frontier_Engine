@@ -20,13 +20,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AI\AI.cpp" />
-    <ClCompile Include="Graphics\Tileset.cpp" />
-    <ClCompile Include="Rectangle.cpp" />
-    <ClCompile Include="Graphics\Tile.cpp" />
+    <ClCompile Include="Add_On\Rectangle.cpp" />
     <ClCompile Include="World\Entity.cpp" />
     <ClCompile Include="Graphics\Graphics.cpp" />
     <ClCompile Include="Graphics\Sprite.cpp" />
-    <ClCompile Include="SourceFiles\main.cpp">
+    <ClCompile Include="main.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
@@ -34,20 +32,22 @@
     </ClCompile>
     <ClCompile Include="Physics\Physics.cpp" />
     <ClCompile Include="Sound\Sound.cpp" />
-    <ClCompile Include="SourceFiles\Vector2D.cpp" />
+    <ClCompile Include="Add_On\Vector2D.cpp" />
+    <ClCompile Include="World\PlayerEntity.cpp" />
+    <ClCompile Include="World\TileMapEntity.cpp" />
     <ClCompile Include="World\World.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AI\AI.h" />
-    <ClInclude Include="Graphics\Tileset.h" />
-    <ClInclude Include="Rectangle.h" />
-    <ClInclude Include="Graphics\Tile.h" />
+    <ClInclude Include="Add_On\Rectangle.h" />
     <ClInclude Include="World\Entity.h" />
     <ClInclude Include="Graphics\Graphics.h" />
     <ClInclude Include="Graphics\Sprite.h" />
     <ClInclude Include="Physics\Physics.h" />
     <ClInclude Include="Sound\Sound.h" />
-    <ClInclude Include="SourceFiles\Vector2D.h" />
+    <ClInclude Include="Add_On\Vector2D.h" />
+    <ClInclude Include="World\PlayerEntity.h" />
+    <ClInclude Include="World\TileMapEntity.h" />
     <ClInclude Include="World\World.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
