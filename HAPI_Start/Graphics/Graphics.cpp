@@ -50,7 +50,7 @@ bool Graphics::Update()
 }
 
 
-bool Graphics::CreateSprite(std::string name, int x, int y, int spritesInCol, int spritesInRow, std::string path)
+bool Graphics::CreateSprite(std::string name, int spritesInCol, int spritesInRow, std::string path)
 {
 
 	Sprite *spritePntr  = new Sprite(name, spritesInCol, spritesInRow);

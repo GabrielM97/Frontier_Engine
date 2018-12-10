@@ -4,6 +4,9 @@
 #include "Entity.h"
 #include "PlayerEntity.h"
 #include "TileMapEntity.h"
+#include "EnemyEntity.h"
+#include "..\\Add_On\XMLParser.h"
+#include "..\Add_On\StringHandler.h"
 
 
 
@@ -27,33 +30,33 @@ void World::Run()
 
 bool World::SetupGameWorld()
 {
-	
-	
+
 	if (!window->CreateWindow(SCREENWIDTH, SCREENHEIGHT, "Horizon Engine", 2))
 	{
 		return false;
 	}
 
-	window->CreateSprite("Lucas", 0, 0, 4, 4, "Data\\character.png");
-	window->CreateSprite("battle", 0, 0, 4, 4, "Data\\characterBattle.png");
+	window->CreateSprite("Lucas",  4, 4, "Data\\character.png");
+	window->CreateSprite("Log",  3, 4, "Data\\log.png");
+	window->CreateSprite("battle",  4, 4, "Data\\characterBattle.png");
 	
+	enemyEntities.push_back(new EnemyEntity("Log", { 250,200 }, 2, 4, 16, 16));
 	playerEntities.push_back(new PlayerEntity("Lucas", { 200,200 }, 2, 4, 14, 24, 0));
 	playerEntities.at(0)->AddSpriteSheetId("battle");
 
+	window->CreateSprite("logo",  4, 4, "Data\\HorizonEngine-Logo.png");
+	window->CreateSprite("map1",  40, 36, "Data\\Overworld.png");
 
-	
-
-	window->CreateSprite("logo", 0, 0, 4, 4, "Data\\HorizonEngine-Logo.png");
-
-	window->CreateSprite("map1",0, 0,  40, 36, "Data\\Overworld.png");
 	tileentities.push_back(new TileMapEntity("map1", 40, 36, 640, 576 ));
 	tileentities.at(0)->MakeTile();
 	tileentities.at(0)->CreateTileMap();
 
 	entities.push_back(tileentities.at(0));
+	entities.push_back(enemyEntities.at(0));
 	entities.push_back(playerEntities.at(0));
+	
 
-	velocity.setPos(0, 0);
+	
 	HAPI.SetShowFPS(true);
 	return true;
 }
@@ -96,7 +99,8 @@ void World::createGameWorld()
 
 				if (checkCollision(e)) {
 					PlayerEntity * p = (PlayerEntity*)e;
-					p->SetState(State::stop);
+
+					p->SetState(State::collided);
 				}
 
 				e->Render(window);
@@ -207,8 +211,6 @@ void World::CheckUserInput(Entity *e, int controllerID)
 
 World::~World()
 {
-
-	
 
 	for (auto e : entities)
 		delete e;

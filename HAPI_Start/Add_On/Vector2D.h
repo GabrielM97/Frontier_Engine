@@ -3,6 +3,7 @@
 #include<iostream>
 
 using namespace std;
+
 namespace GM
 {
 	class Vector2D

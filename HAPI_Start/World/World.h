@@ -9,7 +9,10 @@
 class Graphics;
 class Entity;
 class PlayerEntity;
+class EnemyEntity;
 class TileMapEntity;
+class XMLParser;
+class StringHandler;
 
 using namespace GM;
 using namespace HAPISPACE;
@@ -38,8 +41,6 @@ public:
 	void DisplayLogo();
 	void createGameWorld();
 	bool checkCollision(Entity *e);
-	
-	
 	void CheckUserInput(Entity * e, int controllerID);
 	virtual ~World();
 
@@ -53,6 +54,7 @@ private:
 	Hit hit;
 	bool collided = false;
 	std::vector<PlayerEntity*> playerEntities;
+	std::vector<EnemyEntity*>	enemyEntities;
 	std::vector<TileMapEntity*> tileentities;
 	std::vector<Entity*> entities;
 

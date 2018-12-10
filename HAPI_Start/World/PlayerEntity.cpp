@@ -1,6 +1,6 @@
 #include "PlayerEntity.h"
 #include "..\Graphics\Graphics.h"
-
+#include "..\Physics\Physics.h"
 
 
 PlayerEntity::PlayerEntity()
@@ -36,10 +36,10 @@ void PlayerEntity::CreateCollisionBox(int x, int y, int width, int height)
 
 void const PlayerEntity::Render(Graphics* g)
 {
-	if (playerState == State::stop)
+	if (state == State::collided)
 		position = prevPosition;
 
-	g->Draw(spriteId.at(activeSpriteSheet), RenderType::TILE, (int)playerDirection, (int)playerState, position.x, position.y);
+	g->Draw(spriteId.at(activeSpriteSheet), RenderType::TILE, (int)direction, (int)state, position.x, position.y);
 	prevPosition = position;
 	
 }
@@ -47,7 +47,7 @@ void const PlayerEntity::Render(Graphics* g)
 void PlayerEntity::Update()
 {
 	
-	switch (playerDirection)
+	switch (direction)
 	{
 
 	case Direction::NORTH:
@@ -68,7 +68,7 @@ void PlayerEntity::Update()
 		break;
 	}
 
-	switch (playerState)
+	switch (state)
 	{
 	case State::moving:
 		SetSpeed(walkSpeed_);
@@ -114,13 +114,6 @@ void PlayerEntity::AddSpriteSheetId(std::string name)
 {
 	spriteId.push_back(name);
 }
-
-
-
-
-
-
-
 
 
 PlayerEntity::~PlayerEntity()

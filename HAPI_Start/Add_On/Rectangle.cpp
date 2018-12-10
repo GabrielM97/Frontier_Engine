@@ -28,10 +28,6 @@ namespace GM
 
 	bool Rectangle::Intersects(Rectangle & otherRect)
 	{
-
-
-		
-
 		if (left >= otherRect.left && left <= otherRect.right || right >= otherRect.left && right <= otherRect.right)
 		{
 			if (top+5 >= otherRect.top && top+5 <= otherRect.bottom || bottom >= otherRect.top && bottom <= otherRect.bottom)

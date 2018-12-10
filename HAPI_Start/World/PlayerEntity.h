@@ -1,6 +1,6 @@
 #pragma once
 #include "Entity.h"
-#include "..\Physics\Physics.h"
+
 
 
 
@@ -17,9 +17,9 @@ public:
 	void setPosition();
 	void setprevPosition(Vector2D prevpos) { prevPosition = prevpos; };
 	void SetSpeed(float UpdatedSpeed);
-	void SetDirection(Direction dir) { playerDirection = dir; };
-	void SetState(State state) { playerState = state; };
-	State GetState() { return playerState; };
+	void SetDirection(Direction dir) { direction = dir; };
+	void SetState(State s) { state = s; };
+	State GetState() { return state; };
 	void AddSpriteSheetId(std::string name);
 	Vector2D GetPosition() { return position;  };
 	Type GetType() { return entityType; };
@@ -27,14 +27,8 @@ public:
 	
 
 private:
-	Physics *physics;
-	int walkSpeed_, sprintSpeed_, activeSpriteSheet;
-	Direction playerDirection;
-	State playerState;
-	Vector2D prevPosition;
-	vector<std::string> spriteId;
 	
-	 
+	
 	
 };
 

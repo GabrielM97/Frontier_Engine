@@ -2,6 +2,9 @@
 #include "Entity.h"
 #include <unordered_map>
 
+class StringHandler;
+class XMLParser;
+
 
 struct Tile
 {

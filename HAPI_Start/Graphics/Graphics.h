@@ -12,8 +12,6 @@ using namespace HAPISPACE;
 
 
 
-
-
 class Graphics
 {
 public:
@@ -22,7 +20,8 @@ public:
 	void ClearScreen(unsigned int r, unsigned int g, unsigned int b, unsigned int a);
 	
 	bool Update();
-	bool CreateSprite(std::string name, int x, int y, int spritesInCol, int spritesInRow, std::string path);
+	bool CreateSprite(std::string name, int spritesInCol, int spritesInRow, std::string path);
+	
 
 	void Draw(std::string name, RenderType flag, int dir, int state, float posX, float posY);
 

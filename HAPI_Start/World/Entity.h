@@ -11,6 +11,7 @@
 using namespace HAPISPACE;
 using namespace GM;
 class Graphics;
+class Physics;
 
 enum class Direction
 {
@@ -24,7 +25,7 @@ enum class Direction
 
 enum class State
 {
-	moving = 0, stop = 1, battle = 3, running = 4
+	moving = 0, stop = 1, battle = 3, running = 4, collided = 5
 };
 
 
@@ -46,16 +47,22 @@ public:
 	virtual void const Render(Graphics* g) = 0;
 	virtual void CreateCollisionBox(int x, int y, int width, int height) = 0;
 	virtual Type GetType() = 0;
+	virtual State GetState() { return state; };
+	virtual Direction GetDirection() { return direction; };
 	Rectangle collisionBox;
 	bool isCollidable = false;
 	int controllerID;
 
 protected:
 	Type entityType;
-	Vector2D position;
+	Vector2D position, prevPosition;
 	std::string name;
-	int width;
-	int height;
+	Physics *physics;
+	vector<std::string> spriteId;
+	bool isAlive{ true };
+	int walkSpeed_, sprintSpeed_, activeSpriteSheet, damage, health, height, width;
+	Direction direction;
+	State state;
 	
 	
 };
