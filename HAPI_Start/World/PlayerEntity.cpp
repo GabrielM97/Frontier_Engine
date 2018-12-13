@@ -8,7 +8,7 @@ PlayerEntity::PlayerEntity()
 }
 
 
-PlayerEntity::PlayerEntity(std::string playerName, Vector2D pos, int walkSpeed, int sprintSpeed, int w, int h,  int c_id)
+PlayerEntity::PlayerEntity(std::string playerName,int hp, Vector2D pos, int walkSpeed, int sprintSpeed, int w, int h,  int c_id)
 {
 	name = playerName;
 	position = pos;
@@ -37,7 +37,7 @@ void PlayerEntity::CreateCollisionBox(int x, int y, int width, int height)
 void const PlayerEntity::Render(Graphics* g)
 {
 	if (state == State::collided)
-		position = prevPosition;
+		position -= (position - prevPosition);
 
 	g->Draw(spriteId.at(activeSpriteSheet), RenderType::TILE, (int)direction, (int)state, position.x, position.y);
 	prevPosition = position;
@@ -71,11 +71,11 @@ void PlayerEntity::Update()
 	switch (state)
 	{
 	case State::moving:
-		SetSpeed(walkSpeed_);
+		SetSpeed((float)walkSpeed_);
 		activeSpriteSheet = 0;
 		break;
 	case State::running:
-		SetSpeed(sprintSpeed_);
+		SetSpeed((float)sprintSpeed_);
 		break;
 
 	case State::battle:
@@ -92,7 +92,7 @@ void PlayerEntity::Update()
 
 	setPosition();
 
-	CreateCollisionBox(position.x, position.y, width, height );
+	CreateCollisionBox((int)position.x, (int)position.y, width, height );
 	
 }
 

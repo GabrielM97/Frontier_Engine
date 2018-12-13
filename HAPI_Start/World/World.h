@@ -49,7 +49,7 @@ private:
 	const int SCREENHEIGHT = 600;
 	Graphics *window{nullptr};
 	DWORD lastTick = 0;
-	unsigned int simulationTime{ 16 };
+	unsigned int simulationTime{ 32 };
 	Vector2D velocity;
 	Hit hit;
 	bool collided = false;

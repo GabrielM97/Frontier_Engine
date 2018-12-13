@@ -48,7 +48,9 @@ public:
 	virtual void CreateCollisionBox(int x, int y, int width, int height) = 0;
 	virtual Type GetType() = 0;
 	virtual State GetState() { return state; };
+	virtual void SetState(State s) { state = s; };
 	virtual Direction GetDirection() { return direction; };
+	virtual void TakeDamage(int dmg) { health -= dmg; };
 	Rectangle collisionBox;
 	bool isCollidable = false;
 	int controllerID;

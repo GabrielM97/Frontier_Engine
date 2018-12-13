@@ -3,7 +3,7 @@
 #include "..\Physics\Physics.h"
 
 
-EnemyEntity::EnemyEntity(std::string playerName, Vector2D pos, int walkSpeed, int sprintSpeed, int w, int h)
+EnemyEntity::EnemyEntity(std::string playerName, int hp, Vector2D pos, int walkSpeed, int sprintSpeed, int w, int h)
 {
 	name = playerName;
 	position = pos;
@@ -17,17 +17,20 @@ EnemyEntity::EnemyEntity(std::string playerName, Vector2D pos, int walkSpeed, in
 	entityType = Type::Enemy;
 	width = w;
 	height = h;
-	
 }
 
 void EnemyEntity::CreateCollisionBox(int x, int y, int width, int height)
 {
+	collisionBox.left = x;
+	collisionBox.top = y;
+	collisionBox.right = x + width;
+	collisionBox.bottom = y + height;
 }
 
 void const EnemyEntity::Render(Graphics * g)
 {
 	if (state == State::collided)
-		position = prevPosition;
+		position -= (position - prevPosition);
 
 	g->Draw(spriteId.at(activeSpriteSheet), RenderType::TILE, (int)direction, (int)state, position.x, position.y);
 	prevPosition = position;
@@ -35,8 +38,8 @@ void const EnemyEntity::Render(Graphics * g)
 
 void EnemyEntity::Update()
 {
-
-	CreateCollisionBox(position.x, position.y, width, height);
+	CreateCollisionBox((int)position.x, (int)position.y, width, height);
+	state = State::moving;
 }
 
 EnemyEntity::~EnemyEntity()

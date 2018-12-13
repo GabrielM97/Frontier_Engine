@@ -37,11 +37,11 @@ bool World::SetupGameWorld()
 	}
 
 	window->CreateSprite("Lucas",  4, 4, "Data\\character.png");
-	window->CreateSprite("Log",  3, 4, "Data\\log.png");
+	window->CreateSprite("Log",  3, 4, "Data\\monster_bird1.png");
 	window->CreateSprite("battle",  4, 4, "Data\\characterBattle.png");
 	
-	enemyEntities.push_back(new EnemyEntity("Log", { 250,200 }, 2, 4, 16, 16));
-	playerEntities.push_back(new PlayerEntity("Lucas", { 200,200 }, 2, 4, 14, 24, 0));
+	enemyEntities.push_back(new EnemyEntity("Log",3, { 250,200 }, 2, 4, 50, 40));
+	playerEntities.push_back(new PlayerEntity("Lucas",3, { 200,200 }, 2, 4, 14, 24, 0));
 	playerEntities.at(0)->AddSpriteSheetId("battle");
 
 	window->CreateSprite("logo",  4, 4, "Data\\HorizonEngine-Logo.png");
@@ -54,8 +54,6 @@ bool World::SetupGameWorld()
 	entities.push_back(tileentities.at(0));
 	entities.push_back(enemyEntities.at(0));
 	entities.push_back(playerEntities.at(0));
-	
-
 	
 	HAPI.SetShowFPS(true);
 	return true;
@@ -97,10 +95,9 @@ void World::createGameWorld()
 
 				e->Update();
 
-				if (checkCollision(e)) {
-					PlayerEntity * p = (PlayerEntity*)e;
-
-					p->SetState(State::collided);
+				if (checkCollision(e)) 
+				{
+					e->SetState(State::collided);
 				}
 
 				e->Render(window);
@@ -145,7 +142,6 @@ bool World::checkCollision(Entity * e)
 			{
 				if (e->collisionBox.Intersects(entity->collisionBox))
 				{
-					cout << " Collision  p" << endl;
 					return true;
 				}
 					
@@ -165,8 +161,6 @@ void World::CheckUserInput(Entity *e, int controllerID)
 
 	const HAPI_TControllerData& data = HAPI.GetControllerData(controllerID);
 
-	
-	
 	double valueX = data.analogueButtons[HK_ANALOGUE_LEFT_THUMB_X];
 	double valueY = data.analogueButtons[HK_ANALOGUE_LEFT_THUMB_Y];
 

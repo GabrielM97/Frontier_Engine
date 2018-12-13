@@ -303,11 +303,11 @@ void Sprite::Animate(int dir, int s)
 		texturePosition.y = dir;
 	}
 
-	unsigned int simulationTime{ 50 };
+	unsigned int simulationTime{ 200 };
 	if(s == 3)
-		 simulationTime = 32 ;
+		 simulationTime = 100 ;
 	else
-		 simulationTime= 16 ;
+		 simulationTime= 200 ;
 
 	DWORD lastTick = 0;
 	if (HAPI.GetTime() - lastTick >= simulationTime)
@@ -331,6 +331,10 @@ void Sprite::Animate(int dir, int s)
 
 		case 4:
 			texturePosition.x++;
+			break;
+		case 5:
+			texturePosition.x++;
+			break;
 		default:
 			break;
 		}
