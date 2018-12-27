@@ -42,15 +42,15 @@ void TileMapEntity::CreateTileMap()
 
 	std::vector<CHapiXMLNode*> layers = n.GetDataFromFile<std::vector<CHapiXMLNode*>>("data");
 
-	string w = n.GetDataFromFile<string>("layer", "width");
-	string h = n.GetDataFromFile<string>("layer", "height");
+	mapWidth = n.GetDataFromFile<string>("layer", "width");
+	mapHeight = n.GetDataFromFile<string>("layer", "height");
 
 	for (auto& layer : layers)
 	{
 		auto& map = layer->GetChildren()[0]->GetValue();
 
-		int row = std::stoi(h);
-		int col = std::stoi(w);
+		int row = std::stoi(mapWidth);
+		int col = std::stoi(mapHeight);
 		GM::StringHandler handle;
 
 		vector<string> tiles = handle.SplitString(map.AsString(), col*row, ',');

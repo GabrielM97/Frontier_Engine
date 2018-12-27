@@ -56,6 +56,9 @@
     <ClInclude Include="World\TileMapEntity.h" />
     <ClInclude Include="World\World.h" />
   </ItemGroup>
+  <ItemGroup>
+    <Media Include="C:\Users\gabri\Downloads\The Fall of Arcana.mp3" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{F3EB5DF9-8ECE-4E23-98C7-B8956A9D8315}</ProjectGuid>

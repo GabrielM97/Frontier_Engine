@@ -35,15 +35,15 @@ public:
 	void CreateCollisionBox(int x, int y, int width, int height, Tile *t);
 	Type GetType() { return entityType; };
 	vector<Tile*> getTile() { return tilemap; };
+	int GetMapWidth() { return std::stoi(mapWidth); };
+	int GetMapHeight() { return std::stoi(mapHeight); };
 	~TileMapEntity();
 
 
 private:
-	int textureWidth;
-	int textureHeight;
-	int tilesInCol;
-	int tilesInRow;
-	
+	int textureWidth, textureHeight, tilesInCol, tilesInRow;
+	string  mapWidth, mapHeight;
+
 	unordered_map<int, Tile*> tileset;
 	vector<Tile*> tilemap;
 };

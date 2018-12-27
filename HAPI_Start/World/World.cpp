@@ -7,6 +7,7 @@
 #include "EnemyEntity.h"
 #include "..\\Add_On\XMLParser.h"
 #include "..\Add_On\StringHandler.h"
+#include "..\Sound\Sound.h"
 
 
 
@@ -16,17 +17,115 @@ World::World()
 	
 }
 
+#pragma region Menu
+
+void World::DisplayMenu()
+{
+	unordered_map<string, bool> options = { {"Play", true}, {"How to play", false}, {"Exit", false} };
+	string choiceIndex[] = { "Play", "How to play", "Exit" };
+	int index = 0;
+	
+	
+	sounds.LoadSound("Data\\MENU_Pick.wav");
+	
+	
+	while (window->Update() && gameState == GameState::Menu)
+	{
+		window->Draw("title", RenderType::TEXTURE, 0, 0, 0, 0);
+		HAPI.ChangeFont("MingLiU-ExtB");
+		int y = 200;
+		
+		for(auto opt : options)
+		{
+
+			switch (opt.second)
+			{
+
+			case true:
+				HAPI.RenderText(5, y, HAPI_TColour::WHITE, opt.first, 50, eUnderlined);
+				break;
+			case false:
+				HAPI.RenderText(5, y, HAPI_TColour::WHITE, opt.first, 50);
+		
+			}
+
+			y += 55;
+		}
+		
+
+		if (HAPI.GetTime() - lastTick >= menuTime)
+		{
+			const HAPI_TKeyboardData &keyData = HAPI.GetKeyboardData();
+
+			const HAPI_TControllerData& data = HAPI.GetControllerData(0);
+
+			double valueX = data.analogueButtons[HK_ANALOGUE_LEFT_THUMB_X];
+			double valueY = data.analogueButtons[HK_ANALOGUE_LEFT_THUMB_Y];
+
+
+			if (keyData.scanCode[HK_DOWN] || valueY < -30000)
+			{
+				options.at(choiceIndex[index]) = false;
+				index++;
+				if (index > 2)
+					index = 0;
+				options.at(choiceIndex[index]) = true;
+
+				
+				sounds.PlaySound("Data\\MENU_Pick.wav", 1);
+				sounds.ModifySoundSettings(1, false, 0.5f);
+			}
+			else if (keyData.scanCode[HK_UP] || valueY > 30000)
+			{
+				options.at(choiceIndex[index]) = false;
+				index--;
+				if (index < 0)
+					index = 2;
+				options.at(choiceIndex[index]) = true;
+				
+				sounds.PlaySound("Data\\MENU_Pick.wav", 1);
+				sounds.ModifySoundSettings(1, false, 0.5f);
+			}
+			
+			
+			if (keyData.scanCode['A'] || data.digitalButtons[HK_DIGITAL_A])
+			{
+
+			}
+			lastTick = HAPI.GetTime();
+		}
+
+
+	}
+}
+#pragma endregion
+
 
 #pragma region SETUP
 void World::Run()
 {
 	if (!SetupGameWorld())
 		return;
+
 	DisplayLogo();
-	createGameWorld();
+	sounds.PlayStreamedSounds("Data\\The Fall of Arcana.wav", 2);
+	sounds.ModifySoundSettings(2, true, 1);
+	DisplayMenu();
+
+	switch (gameState)
+	{
+
+	case GameState::InGame:
+		createGameWorld();
+		break;
+	
+	case GameState::Ended:
+		return;
+		break;
+	
+	}
+	
 }
-
-
 
 bool World::SetupGameWorld()
 {
@@ -45,6 +144,7 @@ bool World::SetupGameWorld()
 	playerEntities.at(0)->AddSpriteSheetId("battle");
 
 	window->CreateSprite("logo",  4, 4, "Data\\HorizonEngine-Logo.png");
+	window->CreateSprite("title",  4, 4, "Data\\TitleScreen.png");
 	window->CreateSprite("map1",  40, 36, "Data\\Overworld.png");
 
 	tileentities.push_back(new TileMapEntity("map1", 40, 36, 640, 576 ));
@@ -201,6 +301,8 @@ void World::CheckUserInput(Entity *e, int controllerID)
 	}
 
 }
+
+
 #pragma endregion
 
 World::~World()
