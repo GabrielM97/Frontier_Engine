@@ -13,6 +13,7 @@ public:
 	void ModifySoundSettings(int instanceid , bool loops, float vol);
 	bool PlaySound(std::string file, int instanceid);
 	bool PlayStreamedSounds(std::string file, int instanceid);
+	void StopStreamedSounds(int instanceid);
 	void StopSound(int instanceid);
 	virtual ~Sound();
 

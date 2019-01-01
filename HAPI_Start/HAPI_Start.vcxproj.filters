@@ -60,6 +60,9 @@
     <ClCompile Include="World\EnemyEntity.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="World\BulletEntity.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Physics\Physics.h">
@@ -104,8 +107,8 @@
     <ClInclude Include="World\EnemyEntity.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <Media Include="C:\Users\gabri\Downloads\The Fall of Arcana.mp3" />
+    <ClInclude Include="World\BulletEntity.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -34,7 +34,9 @@ enum class Type
 	Player = 0,
 	Neutral = 1,
 	Enemy = 3,
-	Map = 4
+	Boss = 4,
+	Map = 5,
+	Bullet = 6
 };
 
 class Entity
@@ -51,6 +53,10 @@ public:
 	virtual void SetState(State s) { state = s; };
 	virtual Direction GetDirection() { return direction; };
 	virtual void TakeDamage(int dmg) { health -= dmg; };
+	virtual bool GetIsAlive() { return isAlive; };
+	virtual void SetIsAlive(bool alive) { isAlive = alive; };
+	virtual string GetName() { return name; };
+	virtual int GetHealth() { return health; };
 	Rectangle collisionBox;
 	bool isCollidable = false;
 	int controllerID;
@@ -62,7 +68,7 @@ protected:
 	Physics *physics;
 	vector<std::string> spriteId;
 	bool isAlive{ true };
-	int walkSpeed_, sprintSpeed_, activeSpriteSheet, damage, health, height, width;
+	int walkSpeed_, sprintSpeed_, activeSpriteSheet, damage, health, max_health, height, width;
 	Direction direction;
 	State state;
 	

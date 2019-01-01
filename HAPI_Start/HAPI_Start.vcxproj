@@ -23,6 +23,7 @@
     <ClCompile Include="Add_On\XMLParser.cpp" />
     <ClCompile Include="AI\AI.cpp" />
     <ClCompile Include="Add_On\Rectangle.cpp" />
+    <ClCompile Include="World\BulletEntity.cpp" />
     <ClCompile Include="World\EnemyEntity.cpp" />
     <ClCompile Include="World\Entity.cpp" />
     <ClCompile Include="Graphics\Graphics.cpp" />
@@ -45,6 +46,7 @@
     <ClInclude Include="Add_On\XMLParser.h" />
     <ClInclude Include="AI\AI.h" />
     <ClInclude Include="Add_On\Rectangle.h" />
+    <ClInclude Include="World\BulletEntity.h" />
     <ClInclude Include="World\EnemyEntity.h" />
     <ClInclude Include="World\Entity.h" />
     <ClInclude Include="Graphics\Graphics.h" />
@@ -55,9 +57,6 @@
     <ClInclude Include="World\PlayerEntity.h" />
     <ClInclude Include="World\TileMapEntity.h" />
     <ClInclude Include="World\World.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <Media Include="C:\Users\gabri\Downloads\The Fall of Arcana.mp3" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>

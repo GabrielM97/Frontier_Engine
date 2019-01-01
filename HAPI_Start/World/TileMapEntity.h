@@ -28,7 +28,7 @@ class TileMapEntity :public Entity
 public:
 	TileMapEntity(std::string tilename, int tilesInCol, int tilesInRow, int w, int h);
 	void MakeTile();
-	void CreateTileMap();
+	void CreateTileMap(string file);
 	void Update();
 	void const Render(Graphics* g);
 	void CreateCollisionBox(int x, int y, int width, int height);

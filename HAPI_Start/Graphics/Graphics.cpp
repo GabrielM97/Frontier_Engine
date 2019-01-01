@@ -11,14 +11,7 @@ bool Graphics::CreateWindow(const int & Width, const int & Height, string title,
 {
 	screenWidth =  Width;
 	screenHeight = Height;
-	if (!HAPI.Initialise(screenWidth, screenHeight, title, flag))
-	{
-		cerr << "Error! Failed to create window. HAPI not initialized..." << endl;
-
-		HAPI.UserMessage("Error! Failed to create window. HAPI not initialized...", "Error");
-
-		return false;
-	}
+	HAPI.Initialise(screenWidth, screenHeight, title, flag);
 	
 	screen = HAPI.GetScreenPointer();
 	return true;
@@ -32,6 +25,8 @@ void Graphics::ClearScreen(unsigned int r, unsigned int g, unsigned int b, unsig
 	{
 		
 		*(HAPI_TColour*)screenPnter = colour;
+
+
 		screenPnter = screen + i;
 	}
 }
@@ -46,6 +41,7 @@ bool Graphics::Update()
 	}
 
 	cerr << "Closing Window..." << endl;
+	HAPI.Close();
 	return false;
 }
 
@@ -67,10 +63,6 @@ bool Graphics::CreateSprite(std::string name, int spritesInCol, int spritesInRow
 	
 }
 
-
-
-
-
 void Graphics::Draw(std::string name, RenderType flag, int dir, int state, float posX, float posY)
 {
 	if(dir != 4 || state != 3)
@@ -91,6 +83,7 @@ Graphics::~Graphics()
 	{
 		delete s.second;
 	}
+	
 	
 	cout << "Detructor" << endl;
 }

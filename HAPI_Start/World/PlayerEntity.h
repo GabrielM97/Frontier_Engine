@@ -1,5 +1,6 @@
 #pragma once
 #include "Entity.h"
+#include <ctime>
 
 
 
@@ -19,13 +20,22 @@ public:
 	void SetSpeed(float UpdatedSpeed);
 	void SetDirection(Direction dir) { direction = dir; };
 	void AddSpriteSheetId(std::string name);
+	void gainEXP(int experience);
 	Vector2D GetPosition() { return position;  };
 	Type GetType() { return entityType; };
+	bool GetLevelUP() { return levelup; };
+	int GetLevel() { return lvl; };
+	int GetExp() { return exp; };
+	int GetExpToNextLevel() { return expToNextLvl; };
+
 	
 	
 
 private:
-	
+	int exp{ 0 };
+	int expToNextLvl{50};
+	int lvl{1};
+	bool levelup = { false };
 	
 	
 };

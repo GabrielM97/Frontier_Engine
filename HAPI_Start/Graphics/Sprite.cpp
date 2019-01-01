@@ -137,41 +137,41 @@ void Sprite::BlitClipping(BYTE * textureData, BYTE* screen, int screenWidth, int
 	if (x > 0 && x < screenWidth && y > 0 && y > screenHeight)
 	{
 		for (int row = t_posY; row < clippingHeight; row++)
-	{
-
-		for (int col = t_posX; col < clippingWidth; col++)
 		{
-			BYTE alpha = texturePnter[3];
 
-			if (alpha == 255)
+			for (int col = t_posX; col < clippingWidth; col++)
 			{
-				memcpy(screenPnter, texturePnter, 4);
+				BYTE alpha = texturePnter[3];
+
+				if (alpha == 255)
+				{
+					memcpy(screenPnter, texturePnter, 4);
+
+				}
+				else if (alpha > 0)
+				{
+					BYTE blue = texturePnter[0];
+					BYTE green = texturePnter[1];
+					BYTE red = texturePnter[2];
+
+					//gives value between 0 and 1;
+					float mod = (float)alpha / 255.0f;
+					screenPnter[0] = screenPnter[0] + ((alpha*(blue - screenPnter[0])) >> 8);
+					screenPnter[1] = screenPnter[1] + ((alpha*(green - screenPnter[1])) >> 8);
+					screenPnter[2] = screenPnter[2] + ((alpha*(red - screenPnter[2])) >> 8);
+				}
+
+
+
+				texturePnter += 4;
+				screenPnter += 4;
 
 			}
-			else if (alpha > 0)
-			{
-				BYTE blue = texturePnter[0];
-				BYTE green = texturePnter[1];
-				BYTE red = texturePnter[2];
-
-				//gives value between 0 and 1;
-				float mod = (float)alpha / 255.0f;
-				screenPnter[0] = screenPnter[0] + ((alpha*(blue - screenPnter[0])) >> 8);
-				screenPnter[1] = screenPnter[1] + ((alpha*(green - screenPnter[1])) >> 8);
-				screenPnter[2] = screenPnter[2] + ((alpha*(red - screenPnter[2])) >> 8);
-			}
 
 
-
-			texturePnter += 4;
-			screenPnter += 4;
-
+			screenPnter += endOfLineScreenIncrement;
+			texturePnter += endOfTextureIncrement;
 		}
-
-
-		screenPnter += endOfLineScreenIncrement;
-		texturePnter += endOfTextureIncrement;
-	}
 
 	}
 	for (int row = t_posY; row < clippingHeight; row++)
@@ -231,8 +231,6 @@ void Sprite::BlitWithoutAlpha(BYTE * screen, int screenWidth, float posX, float 
 void Sprite::Draw(RenderType flag, BYTE* screen, int screenwidth, int screenheight, float posX, float posY)
 {
 	SetBounds();
-	
-
 
 	switch (flag)
 	{

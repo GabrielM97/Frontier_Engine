@@ -63,6 +63,12 @@ bool Sound::PlayStreamedSounds(std::string file, int instanceid)
 
 }
 
+void Sound::StopStreamedSounds(int instanceid)
+{
+	if (soundInstances.find(instanceid) != soundInstances.end())
+		HAPI.StopStreamedMedia(soundInstances.at(instanceid));
+}
+
 void Sound::StopSound(int instanceid)
 {
 	if(soundInstances.find(instanceid) != soundInstances.end())

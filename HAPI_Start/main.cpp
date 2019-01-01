@@ -1,5 +1,5 @@
 /* 
-	Horizon Game Engine! v1.1
+	Horizon Game Engine! v2.2
 	
 	By Gabriel Menezes
 */
@@ -7,6 +7,7 @@
 // Include the HAPI header to get access to all of HAPIs interfaces
 
 #include "..\World/World.h"
+#include <HAPI_lib.h>
 
 
 // HAPI itself is wrapped in the HAPISPACE namespace
@@ -17,15 +18,21 @@
 void HAPI_Main()
 {
 	
+	while (true)
+	{
+		World *game = new World();
+		game->gameState = GameState::Menu;
+		game->Run();
 
-	World *game = new World();
-	
-	game->Run();
+		if (game->gameState == GameState::Exit)
+		{
+			delete game;
+			break;
+		}
 
-	delete game;
-	
+		delete game;
 
-	
+	}
 	
 	
 }

@@ -23,6 +23,9 @@ PlayerEntity::PlayerEntity(std::string playerName,int hp, Vector2D pos, int walk
 	width = w;
 	height = h;
 	controllerID = c_id;
+	health = hp;
+	max_health = hp;
+	isAlive = true;
 }
 
 
@@ -38,6 +41,23 @@ void const PlayerEntity::Render(Graphics* g)
 {
 	if (state == State::collided)
 		position -= (position - prevPosition);
+
+	if (levelup)
+	{
+		
+		time_t start = time(0);
+
+		double seconds_since_start = 0.0;
+
+		while (g->Update() && seconds_since_start < 2)
+		{
+			HAPI.RenderText(300, 200, HAPI_TColour::YELLOW, "YOU LEVELED UP!", 30);
+			HAPI.RenderText(280, 240, HAPI_TColour::YELLOW, "YOU ARE NOW LEVEL " + std::to_string(lvl), 30);
+
+			seconds_since_start = difftime(time(0), start);
+		}
+		levelup = false;
+	}
 
 	g->Draw(spriteId.at(activeSpriteSheet), RenderType::TILE, (int)direction, (int)state, position.x, position.y);
 	prevPosition = position;
@@ -88,7 +108,7 @@ void PlayerEntity::Update()
 		activeSpriteSheet = 0;
 		break;
 	}
-
+	
 
 	setPosition();
 
@@ -113,6 +133,21 @@ void PlayerEntity::SetSpeed(float updatedSpeed)
 void PlayerEntity::AddSpriteSheetId(std::string name)
 {
 	spriteId.push_back(name);
+}
+
+void PlayerEntity::gainEXP(int experience)
+{
+	exp += experience;
+	if (exp >= expToNextLvl)
+	{
+		lvl++;
+		exp = 0;
+		expToNextLvl = expToNextLvl + 10;
+		max_health += 2;
+		health = max_health;
+
+		levelup = true;
+	}
 }
 
 

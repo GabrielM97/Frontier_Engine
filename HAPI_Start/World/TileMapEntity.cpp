@@ -18,6 +18,7 @@ TileMapEntity::TileMapEntity(std::string tilename, int tInCol, int tInRow, int w
 	height = textureHeight / tilesInRow;
 	width = textureWidth / tilesInCol;
 	entityType = Type::Map;
+	isAlive = true;
 }
 
 void TileMapEntity::MakeTile()
@@ -36,9 +37,9 @@ void TileMapEntity::MakeTile()
 
 }
 
-void TileMapEntity::CreateTileMap()
+void TileMapEntity::CreateTileMap(string file)
 {
-	GM::XMLParser n("Data\\testmap.xml");
+	GM::XMLParser n(file);
 
 	std::vector<CHapiXMLNode*> layers = n.GetDataFromFile<std::vector<CHapiXMLNode*>>("data");
 
