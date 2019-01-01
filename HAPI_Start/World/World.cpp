@@ -655,6 +655,7 @@ void World::VictoryScreen()
 
 World::~World()
 {
+
 	for (auto *enemy : enemyEntities)
 	{
 		if (!enemy->GetIsAlive())
@@ -684,4 +685,5 @@ World::~World()
 	
 
 	delete window;
+
 }
