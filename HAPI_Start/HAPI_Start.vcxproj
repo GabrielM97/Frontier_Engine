@@ -19,8 +19,13 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Add_On\StringHandler.cpp" />
+    <ClCompile Include="Add_On\XMLParser.cpp" />
     <ClCompile Include="AI\AI.cpp" />
-    <ClCompile Include="Graphics\Entity.cpp" />
+    <ClCompile Include="Add_On\Rectangle.cpp" />
+    <ClCompile Include="World\BulletEntity.cpp" />
+    <ClCompile Include="World\EnemyEntity.cpp" />
+    <ClCompile Include="World\Entity.cpp" />
     <ClCompile Include="Graphics\Graphics.cpp" />
     <ClCompile Include="Graphics\Sprite.cpp" />
     <ClCompile Include="main.cpp">
@@ -31,17 +36,26 @@
     </ClCompile>
     <ClCompile Include="Physics\Physics.cpp" />
     <ClCompile Include="Sound\Sound.cpp" />
-    <ClCompile Include="Vector2D.cpp" />
+    <ClCompile Include="Add_On\Vector2D.cpp" />
+    <ClCompile Include="World\PlayerEntity.cpp" />
+    <ClCompile Include="World\TileMapEntity.cpp" />
     <ClCompile Include="World\World.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Add_On\StringHandler.h" />
+    <ClInclude Include="Add_On\XMLParser.h" />
     <ClInclude Include="AI\AI.h" />
-    <ClInclude Include="Graphics\Entity.h" />
+    <ClInclude Include="Add_On\Rectangle.h" />
+    <ClInclude Include="World\BulletEntity.h" />
+    <ClInclude Include="World\EnemyEntity.h" />
+    <ClInclude Include="World\Entity.h" />
     <ClInclude Include="Graphics\Graphics.h" />
     <ClInclude Include="Graphics\Sprite.h" />
     <ClInclude Include="Physics\Physics.h" />
     <ClInclude Include="Sound\Sound.h" />
-    <ClInclude Include="Vector2D.h" />
+    <ClInclude Include="Add_On\Vector2D.h" />
+    <ClInclude Include="World\PlayerEntity.h" />
+    <ClInclude Include="World\TileMapEntity.h" />
     <ClInclude Include="World\World.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
@@ -132,6 +146,7 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>HAPI;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <BrowseInformation>true</BrowseInformation>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -139,6 +154,9 @@
       <AdditionalLibraryDirectories>HAPI;C:\Program Files (x86)\Visual Leak Detector\lib\Win64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>HAPI_Debug64.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <Bscmake>
+      <PreserveSbr>true</PreserveSbr>
+    </Bscmake>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>

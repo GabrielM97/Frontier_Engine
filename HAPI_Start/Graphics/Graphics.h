@@ -1,24 +1,43 @@
 #pragma once
 #include <HAPI_lib.h>
 #include <iostream>
+#include <vector>
+#include <unordered_map>
+#include "Sprite.h"
+#include "..\\Add_On\Rectangle.h"
+
 
 using namespace std;
 using namespace HAPISPACE;
+
+
+
 class Graphics
 {
 public:
 	Graphics();
 	bool CreateWindow(const int & Width, const int & Height, string title, unsigned int flag);
 	void ClearScreen(unsigned int r, unsigned int g, unsigned int b, unsigned int a);
-	void Blit(BYTE * textureData, int & textureWidth, int & textureHeight, float x, float y);
-	void BlitClipping(BYTE * textureData, int texturePosX, int texturePosY, int textureWidth, int clippingWidth, int clippingHieght, float x, float y);
+	
 	bool Update();
+	bool CreateSprite(std::string name, int spritesInCol, int spritesInRow, std::string path);
+	
+
+	void Draw(std::string name, RenderType flag, int dir, int state, float posX, float posY);
+
+	void Draw(std::string name, RenderType flag, int dir, int state, float posX, float posY, Vector2D texturePos);
+	
 	virtual ~Graphics();
 
 	
 private:
-	static int screenWidth;
-	static int screenHeight;
+
+	Rectangle screenRect;
+	int screenWidth;
+	int screenHeight;
+	BYTE *screen;
+	unordered_map<std::string, Sprite*> sprites;
+
 
 
 

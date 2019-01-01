@@ -1,34 +1,54 @@
 #pragma once
-#include "Entity.h"
+#include <HAPI_lib.h>
+#include "..\\Add_On\Rectangle.h"
+#include "..\\Add_On\Vector2D.h"
 #include<string>
 
+
 using namespace std;
-enum class Direction
-{
-	SOUTH = 0,
-	NORTH = 1,
-	WEST = 2,
-	EAST = 3
+using namespace HAPISPACE;
+using namespace GM;
 
-};
-enum class State
+
+enum class RenderType
 {
-	moving = 0, stop = 1, battle = 3
+	TILE = 0,
+	TEXTURE =1,
+	NO_ALPHA = 3
 };
 
-class Sprite :public Entity
+
+
+class Sprite
 {
 public:
+	
 	Sprite();
+	Sprite(string name, int spritesInCol, int spritesInRow);
 
-	Sprite(int x, int y, int spritesInCol, int spritesInRow);
-	void Draw();
-	bool LoadSprite(string path);
-	void Animate(Direction dir, State s);
+	void Blit(BYTE * textureData, BYTE* screen, int screenWidth, int & textureWidth, int & textureHeight, float x, float y) const;
+	void BlitClipping(BYTE * textureData, BYTE* screen, int screenWidth, int screenHeight, int texturePosX, int texturePosY, int textureWidth, int clippingWidth, int clippingHeight, float x, float y) const;
+	void BlitWithoutAlpha(BYTE * screen, int screenWidth, float posX, float posY);
+	void Draw(RenderType flag, BYTE* screen, int screenwidth, int screenheight, float posX, float posY);
+	void Draw(RenderType flag, BYTE * screen, int screenwidth, int screenheight, float posX, float posY, Vector2D texturePos);
+	bool LoadTexture(string path);
+	void Animate(int dir, int s);
+	void SetBounds();
+
+	void SetBounds(Vector2D texturePos);
+	
 	virtual ~Sprite();
 
-private:
+protected:
 	int spritesInCol{ 0 };
 	int spritesInRow{ 0 };
+	string name;
+	Vector2D texturePosition;
+	BYTE * textureData{ nullptr };
+	int textureWidth;
+	int textureHeight;
+	Rectangle bounds;
+	
+	
 };
 
